@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja Virtual — Início, Serviços, Produtos e Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#inicio" class="logo">Loja<span>Virtual</span></a>
+      <nav class="nav">
+        <a href="#inicio" class="nav-link">Início</a>
+        <a href="#servicos" class="nav-link">Serviços</a>
+        <a href="#produtos" class="nav-link">Produtos</a>
+        <a href="#blog" class="nav-link">Blog</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <p class="hero-tag">Bem-vindo à sua loja</p>
+        <h1 class="hero-title">Qualidade e praticidade <em>no mesmo lugar</em></h1>
+        <p class="hero-desc">Encontre produtos selecionados, serviços especializados e dicas no nosso blog. Tudo pensado para você.</p>
+        <div class="hero-actions">
+          <a href="#produtos" class="btn btn-primary">Ver produtos</a>
+          <a href="#servicos" class="btn btn-secondary">Conhecer serviços</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicos" class="section section-servicos">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">O que fazemos</span>
+          <h2 class="section-title">Serviços</h2>
+          <p class="section-desc">Soluções pensadas para facilitar o seu dia a dia.</p>
+        </header>
+        <div class="servicos-grid">
+          <article class="card-servico">
+            <div class="card-servico-icon">Entrega</div>
+            <h3>Entrega rápida</h3>
+            <p>Entregas em todo o país com rastreio e prazo garantido.</p>
+          </article>
+          <article class="card-servico">
+            <div class="card-servico-icon">Suporte</div>
+            <h3>Suporte dedicado</h3>
+            <p>Atendimento humanizado antes, durante e depois da compra.</p>
+          </article>
+          <article class="card-servico">
+            <div class="card-servico-icon">Troca</div>
+            <h3>Troca facilitada</h3>
+            <p>Política de trocas e devoluções transparente e sem burocracia.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="produtos" class="section section-produtos">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Catálogo</span>
+          <h2 class="section-title">Produtos em destaque</h2>
+          <p class="section-desc">Destaques escolhidos para você.</p>
+        </header>
+        <div class="produtos-grid">
+          <article class="card-produto">
+            <div class="card-produto-img">1</div>
+            <h3>Produto exemplo A</h3>
+            <p class="card-produto-preco">R$ 149,90</p>
+            <a href="#" class="btn btn-small">Ver detalhes</a>
+          </article>
+          <article class="card-produto">
+            <div class="card-produto-img">2</div>
+            <h3>Produto exemplo B</h3>
+            <p class="card-produto-preco">R$ 229,90</p>
+            <a href="#" class="btn btn-small">Ver detalhes</a>
+          </article>
+          <article class="card-produto">
+            <div class="card-produto-img">3</div>
+            <h3>Produto exemplo C</h3>
+            <p class="card-produto-preco">R$ 89,90</p>
+            <a href="#" class="btn btn-small">Ver detalhes</a>
+          </article>
+          <article class="card-produto">
+            <div class="card-produto-img">4</div>
+            <h3>Produto exemplo D</h3>
+            <p class="card-produto-preco">R$ 319,90</p>
+            <a href="#" class="btn btn-small">Ver detalhes</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="blog" class="section section-blog">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Conteúdo</span>
+          <h2 class="section-title">Blog</h2>
+          <p class="section-desc">Dicas, novidades e inspirações.</p>
+        </header>
+        <div class="blog-grid">
+          <article class="card-blog">
+            <div class="card-blog-img">Post 1</div>
+            <div class="card-blog-body">
+              <time>10 mar 2025</time>
+              <h3>Como escolher o melhor produto para você</h3>
+              <p>Guia rápido para acertar na escolha e aproveitar ao máximo sua compra.</p>
+              <a href="#" class="link-arrow">Ler mais</a>
+            </div>
+          </article>
+          <article class="card-blog">
+            <div class="card-blog-img">Post 2</div>
+            <div class="card-blog-body">
+              <time>08 mar 2025</time>
+              <h3>Novidades da temporada</h3>
+              <p>Confira o que está chegando e as tendências que valem a pena acompanhar.</p>
+              <a href="#" class="link-arrow">Ler mais</a>
+            </div>
+          </article>
+          <article class="card-blog">
+            <div class="card-blog-img">Post 3</div>
+            <div class="card-blog-body">
+              <time>05 mar 2025</time>
+              <h3>Dicas de cuidado com seus produtos</h3>
+              <p>Manutenção e conservação para prolongar a vida útil do que você comprou.</p>
+              <a href="#" class="link-arrow">Ler mais</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#inicio" class="logo">Loja<span>Virtual</span></a>
+        <p>Qualidade e praticidade no mesmo lugar.</p>
+      </div>
+      <nav class="footer-nav">
+        <a href="#inicio">Início</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#blog">Blog</a>
+      </nav>
+      <p class="footer-copy">&copy; 2025 Loja Virtual. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
