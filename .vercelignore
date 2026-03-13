@@ -3,9 +3,14 @@ database/
 uploads/
 *.sqlite
 
-# Backend PHP (usado só em dev local; no Vercel usamos API Node)
-# Mantemos a pasta api/ pois contém as funções .js
-# Os .php não são executados no Vercel
+# API PHP: conflita com api/*.js no Vercel (só usamos Node.js no deploy)
+api/auth.php
+api/blog.php
+api/common.php
+api/config.local.example.php
+api/produtos.php
+api/servicos.php
+api/upload.php
 
 node_modules
 .git
