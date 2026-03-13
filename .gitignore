@@ -3,6 +3,9 @@ database/*.sqlite
 database/*.sqlite-journal
 uploads/
 
+# Build output
+public/
+
 # Node
 node_modules/
 

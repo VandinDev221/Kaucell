@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Loja virtual KAUCELL - frontend estático + API serverless para Vercel",
   "private": true,
+  "scripts": {
+    "build": "node scripts/copy-frontend.js"
+  },
   "engines": {
     "node": ">=18"
   },
