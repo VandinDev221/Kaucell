@@ -1,12 +1,14 @@
+/* Estilos principais do frontend (cópia de styles.css raiz) */
+
 /* ===== Variáveis e base (tema claro moderno) ===== */
 :root {
-  --color-bg: #f3f4f6;           /* fundo quase branco */
-  --color-bg-soft: #e5f3ff;      /* seções suaves com leve azul */
-  --color-bg-card: #ffffff;      /* cartões brancos */
-  --color-surface: #dbeafe;      /* barras / destaques suaves */
+  --color-bg: #f3f4f6;
+  --color-bg-soft: #e5f3ff;
+  --color-bg-card: #ffffff;
+  --color-surface: #dbeafe;
   --color-text: #0f172a;
   --color-text-muted: #64748b;
-  --color-accent: #0ea5e9;       /* azul moderno */
+  --color-accent: #0ea5e9;
   --color-accent-hover: #0284c7;
   --color-accent-soft: rgba(14, 165, 233, 0.12);
   --color-border: rgba(148, 163, 184, 0.35);
@@ -505,7 +507,6 @@ body {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-text-muted);
-  opacity: 0.7;
 }
 
 .card-blog-body {
@@ -787,3 +788,4 @@ body {
     grid-template-columns: 1fr;
   }
 }
+

@@ -16,6 +16,7 @@
   var loginUsuario = document.getElementById('admin-usuario');
   var loginSenha = document.getElementById('admin-senha');
   var logoutTop = document.querySelector('.admin-logout-top');
+  var chkDestaque = document.getElementById('produto-destaque');
   var API = {
     produtos: 'api/produtos.php',
     servicos: 'api/servicos.php',
@@ -45,11 +46,13 @@
     tr.setAttribute('data-preco', item.preco);
     tr.setAttribute('data-imagem-url', item.imagem_url || '');
     tr.setAttribute('data-imagem-arquivo', item.imagem_arquivo || '');
+    tr.setAttribute('data-destaque', item.destaque ? '1' : '0');
     tr.innerHTML =
       '<td>' + item.nome + '</td>' +
       '<td>' + item.categoria + '</td>' +
       '<td class="tabela-preco">' + formatarPreco(item.preco) + '</td>' +
       '<td>' + imagemInfo + '</td>' +
+      '<td>' + (item.destaque ? 'Sim' : 'Não') + '</td>' +
       '<td class="admin-actions">' +
       '<button type="button" class="btn btn-small btn-secondary admin-action-btn" data-action="editar">Editar</button> ' +
       '<button type="button" class="btn btn-small btn-primary admin-action-btn" data-action="excluir">Excluir</button>' +
@@ -185,6 +188,7 @@
     var precoAtual = tr.getAttribute('data-preco') || '';
     var imagemUrlAtual = tr.getAttribute('data-imagem-url') || '';
     var imagemArquivoAtual = tr.getAttribute('data-imagem-arquivo') || '';
+    var destaqueAtual = tr.getAttribute('data-destaque') === '1';
 
     var novoNome = prompt('Nome do produto:', nomeAtual);
     if (novoNome === null) return;
@@ -202,6 +206,10 @@
     if (novaImagemUrl === null) return;
     novaImagemUrl = novaImagemUrl.trim();
 
+    var novoDestaqueStr = prompt('Marcar como destaque na home? (s/n)', destaqueAtual ? 's' : 'n');
+    if (novoDestaqueStr === null) return;
+    var novoDestaque = novoDestaqueStr.toLowerCase().startsWith('s');
+
     if (!novoNome || !novaCategoria || !novoPreco) {
       alert('Nome, categoria e preço são obrigatórios.');
       return;
@@ -215,7 +223,8 @@
         categoria: novaCategoria,
         preco: novoPreco,
         imagem_url: novaImagemUrl,
-        imagem_arquivo: imagemArquivoAtual
+        imagem_arquivo: imagemArquivoAtual,
+        destaque: novoDestaque ? 1 : 0
       })
     }).then(function (res) {
       if (!res.ok || !res.item) {
@@ -251,12 +260,13 @@
     formProduto.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      var nome = document.getElementById('produto-nome').value.trim();
+    var nome = document.getElementById('produto-nome').value.trim();
       var categoria = document.getElementById('produto-categoria').value.trim();
       var preco = document.getElementById('produto-preco').value;
       var imagemUrl = document.getElementById('produto-imagem-url').value.trim();
       var imagemArquivoInput = document.getElementById('produto-imagem-arquivo');
       var arquivo = imagemArquivoInput && imagemArquivoInput.files[0] ? imagemArquivoInput.files[0] : null;
+      var destaqueMarcado = chkDestaque && chkDestaque.checked;
 
       if (!nome || !categoria || !preco) return;
 
@@ -269,7 +279,8 @@
             categoria: categoria,
             preco: preco,
             imagem_url: imagemFinalUrl || imagemUrl,
-            imagem_arquivo: imagemFinalArquivo || ''
+            imagem_arquivo: imagemFinalArquivo || '',
+            destaque: destaqueMarcado ? 1 : 0
           })
         }).then(function (res) {
           if (!res.ok || !res.item) {
@@ -488,4 +499,5 @@
   }
 
   verificarAuthInicial();
-})();
+})(); 
+

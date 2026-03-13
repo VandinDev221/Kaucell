@@ -1,7 +1,6 @@
 {
   "version": 2,
   "buildCommand": "node scripts/copy-frontend.js",
-  "outputDirectory": "public",
   "rewrites": [
     { "source": "/api/produtos.php", "destination": "/api/produtos" },
     { "source": "/api/servicos.php", "destination": "/api/servicos" },

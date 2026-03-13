@@ -5,6 +5,7 @@
   var menuToggle = document.querySelector('.menu-toggle');
   var navLinks = document.querySelectorAll('.nav-link');
   var gridDestaques = document.querySelector('.section-destaques .produtos-grid');
+  var gridCatalogo = document.querySelector('.section-produtos-interna .produtos-grid');
 
   if (menuToggle) {
     menuToggle.addEventListener('click', function () {
@@ -49,7 +50,13 @@
           return;
         }
 
-        var destaques = data.items.slice(0, 3);
+        var destaques = data.items.filter(function (item) {
+          return item.destaque === 1 || item.destaque === '1';
+        }).slice(0, 3);
+
+        if (!destaques.length) {
+          return;
+        }
         gridDestaques.innerHTML = '';
 
         destaques.forEach(function (item) {
@@ -88,9 +95,57 @@
         });
       })
       .catch(function () {
-        // Silencioso: mantêm o conteúdo estático se der erro
+        // Silencioso: mantém o conteúdo estático se der erro
+      });
+  }
+
+  function carregarCatalogoCompleto() {
+    if (!gridCatalogo) return;
+
+    fetch('api/produtos.php')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (!data || !data.ok || !Array.isArray(data.items) || data.items.length === 0) {
+          return;
+        }
+
+        gridCatalogo.innerHTML = '';
+
+        data.items.forEach(function (item) {
+          var artigo = document.createElement('article');
+          artigo.className = 'card-produto';
+
+          var imgDiv = document.createElement('div');
+          imgDiv.className = 'card-produto-img';
+          if (item.imagem_url) {
+            imgDiv.style.backgroundImage = 'url(' + item.imagem_url + ')';
+            imgDiv.style.backgroundSize = 'cover';
+            imgDiv.style.backgroundPosition = 'center';
+            imgDiv.textContent = '';
+          } else {
+            imgDiv.textContent = 'KAUCELL';
+          }
+
+          var titulo = document.createElement('h3');
+          titulo.textContent = item.nome;
+
+          var preco = document.createElement('p');
+          preco.className = 'card-produto-preco';
+          preco.textContent = formatarPreco(item.preco);
+
+          artigo.appendChild(imgDiv);
+          artigo.appendChild(titulo);
+          artigo.appendChild(preco);
+
+          gridCatalogo.appendChild(artigo);
+        });
+      })
+      .catch(function () {
+        // mantém texto padrão se der erro
       });
   }
 
   carregarProdutosDestaque();
-})();
+  carregarCatalogoCompleto();
+})(); 
+

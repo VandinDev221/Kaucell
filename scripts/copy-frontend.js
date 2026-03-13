@@ -2,28 +2,30 @@ const fs = require('fs');
 const path = require('path');
 
 const from = path.join(__dirname, '..', 'frontend');
-const to = path.join(__dirname, '..', 'public');
+const to = path.join(__dirname, '..');
 
 if (!fs.existsSync(from)) {
   console.error('Pasta frontend não encontrada.');
   process.exit(1);
 }
 
-if (!fs.existsSync(to)) {
-  fs.mkdirSync(to, { recursive: true });
-}
-
-function copyRecursive(src, dest) {
+function copyRecursive(src, destDir) {
   const stat = fs.statSync(src);
+  const basename = path.basename(src);
   if (stat.isDirectory()) {
-    if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     for (const name of fs.readdirSync(src)) {
-      copyRecursive(path.join(src, name), path.join(dest, name));
+      copyRecursive(path.join(src, name), path.join(destDir, basename));
     }
   } else {
+    const dest = path.join(destDir, basename);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.copyFileSync(src, dest);
   }
 }
 
-copyRecursive(from, to);
-console.log('Frontend copiado para public/');
+// Copia cada arquivo/pasta de frontend para a raiz (index.html, produtos.html, styles.css, etc.)
+for (const name of fs.readdirSync(from)) {
+  const srcPath = path.join(from, name);
+  copyRecursive(srcPath, to);
+}
+console.log('Frontend copiado para a raiz do projeto.');
