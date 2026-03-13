@@ -13,12 +13,18 @@ try {
     if ($acao === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = api_read_json();
         $usuario = trim((string)($data['usuario'] ?? ''));
-        $senha = trim((string)($data['senha'] ?? ''));
+        $senha = (string)($data['senha'] ?? '');
 
-        $adminUser = getenv('ADMIN_USER') ?: 'admin';
-        $adminPass = getenv('ADMIN_PASS') ?: '1234';
+        if ($usuario === '' || $senha === '') {
+            api_json(['ok' => false, 'logged' => false, 'message' => 'Usuário e senha obrigatórios.'], 400);
+        }
 
-        if ($usuario === $adminUser && $senha === $adminPass) {
+        $pdo = api_db();
+        api_bootstrap_tables($pdo);
+        $stmt = $pdo->prepare('SELECT id, senha_hash FROM admins WHERE usuario = ? LIMIT 1');
+        $stmt->execute([$usuario]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row !== false && password_verify($senha, $row['senha_hash'])) {
             api_start_session();
             $_SESSION['is_admin'] = true;
             api_json(['ok' => true, 'logged' => true]);

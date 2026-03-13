@@ -1,7 +1,6 @@
 const { getAdminFromCookie, setAdminCookie, clearAdminCookie } = require('../lib/auth');
-
-const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASS = process.env.ADMIN_PASS || '1234';
+const { sql, ensureTables } = require('../lib/db');
+const bcrypt = require('bcrypt');
 
 function json(res, data, status = 200) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -30,9 +29,20 @@ module.exports = async function handler(req, res) {
     const usuario = String(body.usuario || '').trim();
     const senha = String(body.senha || '').trim();
 
-    if (usuario === ADMIN_USER && senha === ADMIN_PASS) {
-      setAdminCookie(res);
-      return json(res, { ok: true, logged: true });
+    if (!usuario || !senha) {
+      return json(res, { ok: false, logged: false, message: 'Usuário e senha obrigatórios.' }, 400);
+    }
+
+    try {
+      await ensureTables();
+      const { rows } = await sql`SELECT id, senha_hash FROM admins WHERE usuario = ${usuario} LIMIT 1`;
+      if (rows.length > 0 && await bcrypt.compare(senha, rows[0].senha_hash)) {
+        setAdminCookie(res);
+        return json(res, { ok: true, logged: true });
+      }
+    } catch (e) {
+      console.error('Auth login error:', e);
+      return json(res, { ok: false, logged: false, message: 'Erro no servidor.' }, 500);
     }
     return json(res, { ok: false, logged: false, message: 'Credenciais inválidas.' }, 401);
   }

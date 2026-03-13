@@ -70,6 +70,20 @@ function api_bootstrap_tables(PDO $pdo): void
 {
     // Sintaxe adaptada para SQLite
     $pdo->exec("
+        CREATE TABLE IF NOT EXISTS admins (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario TEXT NOT NULL UNIQUE,
+            senha_hash TEXT NOT NULL,
+            criado_em TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+    ");
+    $stmt = $pdo->query("SELECT 1 FROM admins LIMIT 1");
+    if ($stmt->fetch() === false) {
+        $hash = password_hash('1234', PASSWORD_DEFAULT);
+        $pdo->prepare("INSERT INTO admins (usuario, senha_hash) VALUES ('admin', ?)")->execute([$hash]);
+    }
+
+    $pdo->exec("
         CREATE TABLE IF NOT EXISTS produtos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
