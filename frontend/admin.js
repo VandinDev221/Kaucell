@@ -517,30 +517,57 @@
 
       var titulo = document.getElementById('blog-titulo').value.trim();
       var data = document.getElementById('blog-data').value;
-      var imagemUrl = document.getElementById('blog-imagem') ? document.getElementById('blog-imagem').value.trim() : '';
+      var imagemUrlCampo = document.getElementById('blog-imagem') ? document.getElementById('blog-imagem').value.trim() : '';
+      var imagemArquivoInput = document.getElementById('blog-imagem-arquivo');
+      var arquivo = imagemArquivoInput && imagemArquivoInput.files[0] ? imagemArquivoInput.files[0] : null;
       var resumo = document.getElementById('blog-resumo').value.trim();
 
       if (!titulo || !data || !resumo) return;
 
-      request(API.blog, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          titulo: titulo,
-          data_publicacao: data,
-          resumo: resumo,
-          imagem_url: imagemUrl || undefined
-        })
-      }).then(function (res) {
-        if (!res.ok || !res.item) {
-          alert(res.message || 'Não foi possível cadastrar o post.');
-          return;
-        }
-        listaBlog.prepend(renderBlog(res.item));
-        formBlog.reset();
-      }).catch(function () {
-        alert('Erro ao conectar com a API de blog.');
-      });
+      function criarPost(imagemFinalUrl) {
+        request(API.blog, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            titulo: titulo,
+            data_publicacao: data,
+            resumo: resumo,
+            imagem_url: imagemFinalUrl || imagemUrlCampo || undefined
+          })
+        }).then(function (res) {
+          if (!res.ok || !res.item) {
+            alert(res.message || 'Não foi possível cadastrar o post.');
+            return;
+          }
+          listaBlog.prepend(renderBlog(res.item));
+          formBlog.reset();
+        }).catch(function () {
+          alert('Erro ao conectar com a API de blog.');
+        });
+      }
+
+      if (arquivo) {
+        var formData = new FormData();
+        formData.append('imagem', arquivo);
+        fetch('api/upload.php', {
+          method: 'POST',
+          body: formData
+        }).then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (!data.ok || !data.url) {
+              alert(data.message || 'Não foi possível enviar a imagem.');
+              criarPost('');
+              return;
+            }
+            criarPost(data.url);
+          })
+          .catch(function () {
+            alert('Erro ao enviar a imagem.');
+            criarPost('');
+          });
+      } else {
+        criarPost('');
+      }
     });
   }
 
