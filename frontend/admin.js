@@ -28,7 +28,10 @@
   }
 
   function formatarData(dataIso) {
-    var data = new Date(dataIso + 'T00:00:00');
+    if (!dataIso) return '';
+    var data = /^\d{4}-\d{2}-\d{2}$/.test(String(dataIso).trim())
+      ? new Date(dataIso + 'T12:00:00')
+      : new Date(dataIso);
     if (Number.isNaN(data.getTime())) return dataIso;
     return data.toLocaleDateString('pt-BR');
   }
@@ -134,15 +137,58 @@
 
   function renderBlog(item) {
     var tr = document.createElement('tr');
+    var dataPub = item.data_publicacao ? String(item.data_publicacao).trim().substring(0, 10) : '';
     var imgCel = item.imagem_url
       ? '<img src="' + item.imagem_url.replace(/"/g, '&quot;') + '" alt="" class="admin-thumb" style="max-width:48px;max-height:32px;object-fit:cover;">'
       : '—';
+    tr.setAttribute('data-id', item.id);
+    tr.setAttribute('data-titulo', item.titulo || '');
+    tr.setAttribute('data-data', dataPub);
+    tr.setAttribute('data-resumo', item.resumo || '');
+    tr.setAttribute('data-imagem-url', item.imagem_url || '');
     tr.innerHTML =
-      '<td>' + item.titulo + '</td>' +
+      '<td>' + (item.titulo || '').replace(/</g, '&lt;') + '</td>' +
       '<td>' + formatarData(item.data_publicacao) + '</td>' +
       '<td>' + imgCel + '</td>' +
-      '<td>' + (item.resumo || '').substring(0, 60) + (item.resumo && item.resumo.length > 60 ? '…' : '') + '</td>';
+      '<td>' + (item.resumo || '').substring(0, 60).replace(/</g, '&lt;') + (item.resumo && item.resumo.length > 60 ? '…' : '') + '</td>' +
+      '<td><button type="button" class="btn btn-small btn-secondary admin-action-btn blog-action-btn" data-action="editar">Editar</button></td>';
     return tr;
+  }
+
+  var editBlogId = null;
+  var editBlogTr = null;
+
+  function editarBlog(tr) {
+    var id = tr.getAttribute('data-id');
+    var titulo = tr.getAttribute('data-titulo') || '';
+    var dataPub = tr.getAttribute('data-data') || '';
+    var resumo = tr.getAttribute('data-resumo') || '';
+    var imagemUrl = tr.getAttribute('data-imagem-url') || '';
+
+    document.getElementById('blog-titulo').value = titulo;
+    document.getElementById('blog-data').value = dataPub;
+    var blogImagem = document.getElementById('blog-imagem');
+    if (blogImagem) blogImagem.value = imagemUrl;
+    document.getElementById('blog-resumo').value = resumo;
+    var arquivoInput = document.getElementById('blog-imagem-arquivo');
+    if (arquivoInput) arquivoInput.value = '';
+
+    editBlogId = id;
+    editBlogTr = tr;
+    var submitBtn = document.getElementById('blog-submit-btn');
+    if (submitBtn) { submitBtn.textContent = 'Salvar alterações'; }
+    var cancelBtn = document.getElementById('blog-cancel-btn');
+    if (cancelBtn) { cancelBtn.style.display = 'inline-block'; }
+  }
+
+  function sairEdicaoBlog() {
+    editBlogId = null;
+    editBlogTr = null;
+    var submitBtn = document.getElementById('blog-submit-btn');
+    if (submitBtn) { submitBtn.textContent = 'Adicionar post'; }
+    var cancelBtn = document.getElementById('blog-cancel-btn');
+    if (cancelBtn) { cancelBtn.style.display = 'none'; }
+    if (formBlog) formBlog.reset();
   }
 
   function request(url, options) {
@@ -422,6 +468,23 @@
     });
   }
 
+  if (listaBlog) {
+    listaBlog.addEventListener('click', function (e) {
+      var alvo = e.target;
+      if (!(alvo instanceof HTMLElement)) return;
+      if (!alvo.classList.contains('blog-action-btn')) return;
+      var acao = alvo.getAttribute('data-action');
+      var tr = alvo.closest('tr');
+      if (!tr || acao !== 'editar') return;
+      editarBlog(tr);
+    });
+  }
+
+  var blogCancelBtn = document.getElementById('blog-cancel-btn');
+  if (blogCancelBtn) {
+    blogCancelBtn.addEventListener('click', sairEdicaoBlog);
+  }
+
   if (formServico) {
     formServico.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -524,23 +587,32 @@
 
       if (!titulo || !data || !resumo) return;
 
-      function criarPost(imagemFinalUrl) {
-        request(API.blog, {
+      function salvarPost(imagemFinalUrl) {
+        var url = editBlogId
+          ? API.blog + '?id=' + encodeURIComponent(editBlogId) + '&acao=editar'
+          : API.blog;
+        var payload = {
+          titulo: titulo,
+          data_publicacao: data,
+          resumo: resumo,
+          imagem_url: imagemFinalUrl || imagemUrlCampo || undefined
+        };
+        request(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            titulo: titulo,
-            data_publicacao: data,
-            resumo: resumo,
-            imagem_url: imagemFinalUrl || imagemUrlCampo || undefined
-          })
+          body: JSON.stringify(payload)
         }).then(function (res) {
           if (!res.ok || !res.item) {
-            alert(res.message || 'Não foi possível cadastrar o post.');
+            alert(res.message || (editBlogId ? 'Não foi possível atualizar o post.' : 'Não foi possível cadastrar o post.'));
             return;
           }
-          listaBlog.prepend(renderBlog(res.item));
-          formBlog.reset();
+          if (editBlogId && editBlogTr) {
+            editBlogTr.replaceWith(renderBlog(res.item));
+            sairEdicaoBlog();
+          } else {
+            listaBlog.prepend(renderBlog(res.item));
+            formBlog.reset();
+          }
         }).catch(function () {
           alert('Erro ao conectar com a API de blog.');
         });
@@ -556,17 +628,17 @@
           .then(function (data) {
             if (!data.ok || !data.url) {
               alert(data.message || 'Não foi possível enviar a imagem.');
-              criarPost('');
+              salvarPost('');
               return;
             }
-            criarPost(data.url);
+            salvarPost(data.url);
           })
           .catch(function () {
             alert('Erro ao enviar a imagem.');
-            criarPost('');
+            salvarPost('');
           });
       } else {
-        criarPost('');
+        salvarPost('');
       }
     });
   }

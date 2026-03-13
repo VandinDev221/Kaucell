@@ -126,7 +126,10 @@
               <label for="blog-resumo">Resumo</label>
               <textarea id="blog-resumo" rows="4" required placeholder="Resumo curto para aparecer no card do blog"></textarea>
 
-              <button class="btn btn-primary" type="submit">Adicionar post</button>
+              <div class="admin-form-actions">
+                <button class="btn btn-primary" type="submit" id="blog-submit-btn">Adicionar post</button>
+                <button class="btn btn-secondary" type="button" id="blog-cancel-btn" style="display:none;">Cancelar</button>
+              </div>
             </form>
           </article>
         </div>
@@ -178,6 +181,7 @@
                     <th>Data</th>
                     <th>Imagem</th>
                     <th>Resumo</th>
+                    <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody id="lista-blog"></tbody>

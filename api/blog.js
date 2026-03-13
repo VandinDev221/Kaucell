@@ -25,6 +25,9 @@ module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
     if (!requireAdmin(req, res)) return;
 
+    const id = parseInt(req.query.id, 10) || 0;
+    const acao = String(req.query.acao || '').trim();
+
     let body = {};
     try {
       body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
@@ -37,6 +40,24 @@ module.exports = async function handler(req, res) {
 
     if (!titulo || !dataPublicacao || !resumo) {
       return json(res, { ok: false, message: 'Dados do post inválidos.' }, 422);
+    }
+
+    if (acao === 'editar' && id > 0) {
+      try {
+        const { rows } = await sql`
+          UPDATE blog_posts
+             SET titulo = ${titulo},
+                 data_publicacao = ${dataPublicacao},
+                 resumo = ${resumo},
+                 imagem_url = ${imagemUrl}
+           WHERE id = ${id}
+          RETURNING id, titulo, data_publicacao, resumo, imagem_url
+        `;
+        if (rows && rows.length) return json(res, { ok: true, item: rows[0] });
+        return json(res, { ok: false, message: 'Post não encontrado.' }, 404);
+      } catch (e) {
+        return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
+      }
     }
 
     try {

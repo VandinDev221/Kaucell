@@ -6,6 +6,9 @@ try {
     $pdo = api_db();
     api_bootstrap_tables($pdo);
 
+    $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    $acao = isset($_GET['acao']) ? (string)$_GET['acao'] : '';
+
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $rows = $pdo->query("SELECT id, titulo, data_publicacao, resumo, imagem_url FROM blog_posts ORDER BY id DESC")->fetchAll();
         api_json(['ok' => true, 'items' => $rows]);
@@ -23,6 +26,28 @@ try {
 
         if ($titulo === '' || $dataPublicacao === '' || $resumo === '') {
             api_json(['ok' => false, 'message' => 'Dados do post inválidos.'], 422);
+        }
+
+        if ($acao === 'editar' && $id > 0) {
+            $stmt = $pdo->prepare("
+                UPDATE blog_posts
+                   SET titulo = :titulo,
+                       data_publicacao = :data_publicacao,
+                       resumo = :resumo,
+                       imagem_url = :imagem_url
+                 WHERE id = :id
+            ");
+            $stmt->execute([
+                ':id' => $id,
+                ':titulo' => $titulo,
+                ':data_publicacao' => $dataPublicacao,
+                ':resumo' => $resumo,
+                ':imagem_url' => $imagemUrl,
+            ]);
+            $stmtSel = $pdo->prepare("SELECT id, titulo, data_publicacao, resumo, imagem_url FROM blog_posts WHERE id = :id");
+            $stmtSel->execute([':id' => $id]);
+            $item = $stmtSel->fetch();
+            api_json(['ok' => true, 'item' => $item]);
         }
 
         $stmt = $pdo->prepare("

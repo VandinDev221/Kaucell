@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "build": "node scripts/copy-frontend.js",
-    "vercel-build": "node scripts/copy-frontend.js"
+    "vercel-build": "node scripts/copy-frontend.js",
+    "start": "npm run build && npx serve public -p 3000"
   },
   "engines": {
     "node": ">=18"
