@@ -7,7 +7,7 @@ try {
     api_bootstrap_tables($pdo);
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $rows = $pdo->query("SELECT id, titulo, data_publicacao, resumo FROM blog_posts ORDER BY id DESC")->fetchAll();
+        $rows = $pdo->query("SELECT id, titulo, data_publicacao, resumo, imagem_url FROM blog_posts ORDER BY id DESC")->fetchAll();
         api_json(['ok' => true, 'items' => $rows]);
     }
 
@@ -18,23 +18,26 @@ try {
         $titulo = trim((string)($data['titulo'] ?? ''));
         $dataPublicacao = trim((string)($data['data_publicacao'] ?? ''));
         $resumo = trim((string)($data['resumo'] ?? ''));
+        $imagemUrl = trim((string)($data['imagem_url'] ?? ''));
+        if ($imagemUrl === '') $imagemUrl = null;
 
         if ($titulo === '' || $dataPublicacao === '' || $resumo === '') {
             api_json(['ok' => false, 'message' => 'Dados do post inválidos.'], 422);
         }
 
         $stmt = $pdo->prepare("
-            INSERT INTO blog_posts (titulo, data_publicacao, resumo)
-            VALUES (:titulo, :data_publicacao, :resumo)
+            INSERT INTO blog_posts (titulo, data_publicacao, resumo, imagem_url)
+            VALUES (:titulo, :data_publicacao, :resumo, :imagem_url)
         ");
         $stmt->execute([
             ':titulo' => $titulo,
             ':data_publicacao' => $dataPublicacao,
             ':resumo' => $resumo,
+            ':imagem_url' => $imagemUrl,
         ]);
 
         $idNovo = (int)$pdo->lastInsertId();
-        $stmtSel = $pdo->prepare("SELECT id, titulo, data_publicacao, resumo FROM blog_posts WHERE id = :id");
+        $stmtSel = $pdo->prepare("SELECT id, titulo, data_publicacao, resumo, imagem_url FROM blog_posts WHERE id = :id");
         $stmtSel->execute([':id' => $idNovo]);
         $item = $stmtSel->fetch();
 

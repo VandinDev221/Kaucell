@@ -77,10 +77,18 @@ function api_bootstrap_tables(PDO $pdo): void
             criado_em TEXT NOT NULL DEFAULT (datetime('now'))
         );
     ");
-    $stmt = $pdo->query("SELECT 1 FROM admins LIMIT 1");
-    if ($stmt->fetch() === false) {
-        $hash = password_hash('1234', PASSWORD_DEFAULT);
-        $pdo->prepare("INSERT INTO admins (usuario, senha_hash) VALUES ('admin', ?)")->execute([$hash]);
+    $hash = password_hash('kaua2310#', PASSWORD_DEFAULT);
+    $stmt = $pdo->query("SELECT id, usuario FROM admins LIMIT 5");
+    $admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($admins) === 0) {
+        $pdo->prepare("INSERT INTO admins (usuario, senha_hash) VALUES ('kaua123', ?)")->execute([$hash]);
+    } else {
+        foreach ($admins as $row) {
+            if (($row['usuario'] ?? '') === 'admin') {
+                $pdo->prepare("UPDATE admins SET usuario = 'kaua123', senha_hash = ? WHERE id = ?")->execute([$hash, $row['id']]);
+                break;
+            }
+        }
     }
 
     $pdo->exec("
@@ -118,8 +126,12 @@ function api_bootstrap_tables(PDO $pdo): void
             titulo TEXT NOT NULL,
             data_publicacao TEXT NOT NULL,
             resumo TEXT NOT NULL,
+            imagem_url TEXT,
             criado_em TEXT NOT NULL DEFAULT (datetime('now'))
         );
     ");
+    try {
+        $pdo->exec('ALTER TABLE blog_posts ADD COLUMN imagem_url TEXT');
+    } catch (Throwable $e) {}
 }
 

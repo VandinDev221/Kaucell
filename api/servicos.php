@@ -14,10 +14,32 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         api_require_admin_auth();
 
+        $acao = isset($_GET['acao']) ? (string)$_GET['acao'] : '';
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         $data = api_read_json();
         $modelo = trim((string)($data['modelo'] ?? ''));
         $nomeServico = trim((string)($data['nome_servico'] ?? ''));
         $preco = (float)($data['preco'] ?? 0);
+
+        if ($acao === 'editar') {
+            if ($id <= 0) api_json(['ok' => false, 'message' => 'ID do serviço é obrigatório.'], 422);
+            if ($modelo === '' || $nomeServico === '' || $preco <= 0) api_json(['ok' => false, 'message' => 'Dados de serviço inválidos.'], 422);
+            $stmt = $pdo->prepare("UPDATE servicos SET modelo = :modelo, nome_servico = :nome_servico, preco = :preco WHERE id = :id");
+            $stmt->execute([':modelo' => $modelo, ':nome_servico' => $nomeServico, ':preco' => $preco, ':id' => $id]);
+            if ($stmt->rowCount() === 0) api_json(['ok' => false, 'message' => 'Serviço não encontrado.'], 404);
+            $stmtSel = $pdo->prepare("SELECT id, modelo, nome_servico, preco FROM servicos WHERE id = :id");
+            $stmtSel->execute([':id' => $id]);
+            $item = $stmtSel->fetch(PDO::FETCH_ASSOC);
+            api_json(['ok' => true, 'item' => $item]);
+        }
+
+        if ($acao === 'excluir') {
+            if ($id <= 0) api_json(['ok' => false, 'message' => 'ID do serviço é obrigatório.'], 422);
+            $stmt = $pdo->prepare("DELETE FROM servicos WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+            if ($stmt->rowCount() === 0) api_json(['ok' => false, 'message' => 'Serviço não encontrado.'], 404);
+            api_json(['ok' => true]);
+        }
 
         if ($modelo === '' || $nomeServico === '' || $preco <= 0) {
             api_json(['ok' => false, 'message' => 'Dados de serviço inválidos.'], 422);
@@ -36,7 +58,7 @@ try {
         $idNovo = (int)$pdo->lastInsertId();
         $stmtSel = $pdo->prepare("SELECT id, modelo, nome_servico, preco FROM servicos WHERE id = :id");
         $stmtSel->execute([':id' => $idNovo]);
-        $item = $stmtSel->fetch();
+        $item = $stmtSel->fetch(PDO::FETCH_ASSOC);
 
         api_json(['ok' => true, 'item' => $item]);
     }

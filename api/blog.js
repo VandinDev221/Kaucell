@@ -15,7 +15,7 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const { rows } = await sql`SELECT id, titulo, data_publicacao, resumo FROM blog_posts ORDER BY id DESC`;
+      const { rows } = await sql`SELECT id, titulo, data_publicacao, resumo, imagem_url FROM blog_posts ORDER BY id DESC`;
       return json(res, { ok: true, items: rows });
     } catch (e) {
       return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
@@ -33,6 +33,7 @@ module.exports = async function handler(req, res) {
     const titulo = String(body.titulo || '').trim();
     const dataPublicacao = String(body.data_publicacao || '').trim();
     const resumo = String(body.resumo || '').trim();
+    const imagemUrl = String(body.imagem_url || '').trim() || null;
 
     if (!titulo || !dataPublicacao || !resumo) {
       return json(res, { ok: false, message: 'Dados do post inválidos.' }, 422);
@@ -40,9 +41,9 @@ module.exports = async function handler(req, res) {
 
     try {
       const { rows } = await sql`
-        INSERT INTO blog_posts (titulo, data_publicacao, resumo)
-        VALUES (${titulo}, ${dataPublicacao}, ${resumo})
-        RETURNING id, titulo, data_publicacao, resumo
+        INSERT INTO blog_posts (titulo, data_publicacao, resumo, imagem_url)
+        VALUES (${titulo}, ${dataPublicacao}, ${resumo}, ${imagemUrl})
+        RETURNING id, titulo, data_publicacao, resumo, imagem_url
       `;
       return json(res, { ok: true, item: rows[0] });
     } catch (e) {

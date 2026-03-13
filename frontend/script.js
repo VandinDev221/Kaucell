@@ -145,7 +145,65 @@
       });
   }
 
+  function formatarData(dataIso) {
+    if (!dataIso) return '';
+    var d = new Date(dataIso + 'T00:00:00');
+    if (Number.isNaN(d.getTime())) return dataIso;
+    return d.toLocaleDateString('pt-BR');
+  }
+
+  function carregarBlog() {
+    var grid = document.getElementById('blog-grid');
+    if (!grid) return;
+
+    fetch('api/blog.php')
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (!data || !data.ok || !Array.isArray(data.items) || data.items.length === 0) {
+          grid.innerHTML = '<p class="section-desc">Nenhum post ainda.</p>';
+          return;
+        }
+
+        grid.innerHTML = '';
+        data.items.forEach(function (item) {
+          var artigo = document.createElement('article');
+          artigo.className = 'card-produto';
+
+          var imgDiv = document.createElement('div');
+          imgDiv.className = 'card-produto-img';
+          if (item.imagem_url) {
+            imgDiv.style.backgroundImage = 'url(' + item.imagem_url + ')';
+            imgDiv.style.backgroundSize = 'cover';
+            imgDiv.style.backgroundPosition = 'center';
+          } else {
+            imgDiv.textContent = 'Blog';
+          }
+
+          var titulo = document.createElement('h3');
+          titulo.textContent = item.titulo;
+
+          var dataEl = document.createElement('p');
+          dataEl.className = 'card-produto-preco';
+          dataEl.textContent = formatarData(item.data_publicacao);
+
+          var resumo = document.createElement('p');
+          resumo.className = 'section-desc';
+          resumo.textContent = item.resumo || '';
+
+          artigo.appendChild(imgDiv);
+          artigo.appendChild(titulo);
+          artigo.appendChild(dataEl);
+          artigo.appendChild(resumo);
+          grid.appendChild(artigo);
+        });
+      })
+      .catch(function () {
+        if (grid) grid.innerHTML = '<p class="section-desc">Erro ao carregar o blog.</p>';
+      });
+  }
+
   carregarProdutosDestaque();
   carregarCatalogoCompleto();
+  carregarBlog();
 })(); 
 

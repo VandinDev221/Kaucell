@@ -62,19 +62,86 @@
 
   function renderServico(item) {
     var tr = document.createElement('tr');
+    tr.setAttribute('data-id', item.id);
+    tr.setAttribute('data-modelo', item.modelo || '');
+    tr.setAttribute('data-nome-servico', item.nome_servico || '');
+    tr.setAttribute('data-preco', item.preco || '');
     tr.innerHTML =
       '<td>' + item.modelo + '</td>' +
       '<td>' + item.nome_servico + '</td>' +
-      '<td class="tabela-preco">' + formatarPreco(item.preco) + '</td>';
+      '<td class="tabela-preco">' + formatarPreco(item.preco) + '</td>' +
+      '<td class="admin-actions">' +
+      '<button type="button" class="btn btn-small btn-secondary admin-action-btn servico-action" data-action="editar">Editar</button> ' +
+      '<button type="button" class="btn btn-small btn-primary admin-action-btn servico-action" data-action="excluir">Excluir</button>' +
+      '</td>';
     return tr;
+  }
+
+  function editarServico(tr) {
+    var id = tr.getAttribute('data-id');
+    var modelo = tr.getAttribute('data-modelo') || '';
+    var nomeServico = tr.getAttribute('data-nome-servico') || '';
+    var preco = tr.getAttribute('data-preco') || '';
+
+    var novoModelo = prompt('Modelo:', modelo);
+    if (novoModelo === null) return;
+    novoModelo = novoModelo.trim();
+
+    var novoNome = prompt('Nome do serviço:', nomeServico);
+    if (novoNome === null) return;
+    novoNome = novoNome.trim();
+
+    var novoPreco = prompt('Preço (R$):', String(preco).replace('.', ','));
+    if (novoPreco === null) return;
+    novoPreco = parseFloat(novoPreco.trim().replace(',', '.')) || 0;
+
+    if (!novoModelo || !novoNome || novoPreco <= 0) {
+      alert('Modelo, nome e preço são obrigatórios.');
+      return;
+    }
+
+    request(API.servicos + '?id=' + encodeURIComponent(id) + '&acao=editar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ modelo: novoModelo, nome_servico: novoNome, preco: novoPreco })
+    }).then(function (res) {
+      if (!res.ok || !res.item) {
+        alert(res.message || 'Não foi possível editar o serviço.');
+        return;
+      }
+      tr.replaceWith(renderServico(res.item));
+    }).catch(function () {
+      alert('Erro ao conectar com a API de serviços.');
+    });
+  }
+
+  function excluirServico(tr) {
+    var id = tr.getAttribute('data-id');
+    var nome = tr.getAttribute('data-nome-servico') || 'este serviço';
+    if (!confirm('Excluir "' + nome + '"?')) return;
+    request(API.servicos + '?id=' + encodeURIComponent(id) + '&acao=excluir', {
+      method: 'POST'
+    }).then(function (res) {
+      if (!res.ok) {
+        alert(res.message || 'Não foi possível excluir o serviço.');
+        return;
+      }
+      tr.remove();
+    }).catch(function () {
+      alert('Erro ao conectar com a API de serviços.');
+    });
   }
 
   function renderBlog(item) {
     var tr = document.createElement('tr');
+    var imgCel = item.imagem_url
+      ? '<img src="' + item.imagem_url.replace(/"/g, '&quot;') + '" alt="" class="admin-thumb" style="max-width:48px;max-height:32px;object-fit:cover;">'
+      : '—';
     tr.innerHTML =
       '<td>' + item.titulo + '</td>' +
       '<td>' + formatarData(item.data_publicacao) + '</td>' +
-      '<td>' + item.resumo + '</td>';
+      '<td>' + imgCel + '</td>' +
+      '<td>' + (item.resumo || '').substring(0, 60) + (item.resumo && item.resumo.length > 60 ? '…' : '') + '</td>';
     return tr;
   }
 
@@ -337,6 +404,24 @@
     });
   }
 
+  if (listaServicos) {
+    listaServicos.addEventListener('click', function (e) {
+      var alvo = e.target;
+      if (!(alvo instanceof HTMLElement)) return;
+      if (!alvo.classList.contains('servico-action') && !alvo.classList.contains('admin-action-btn')) return;
+
+      var acao = alvo.getAttribute('data-action');
+      var tr = alvo.closest('tr');
+      if (!tr) return;
+
+      if (acao === 'editar') {
+        editarServico(tr);
+      } else if (acao === 'excluir') {
+        excluirServico(tr);
+      }
+    });
+  }
+
   if (formServico) {
     formServico.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -432,6 +517,7 @@
 
       var titulo = document.getElementById('blog-titulo').value.trim();
       var data = document.getElementById('blog-data').value;
+      var imagemUrl = document.getElementById('blog-imagem') ? document.getElementById('blog-imagem').value.trim() : '';
       var resumo = document.getElementById('blog-resumo').value.trim();
 
       if (!titulo || !data || !resumo) return;
@@ -442,7 +528,8 @@
         body: JSON.stringify({
           titulo: titulo,
           data_publicacao: data,
-          resumo: resumo
+          resumo: resumo,
+          imagem_url: imagemUrl || undefined
         })
       }).then(function (res) {
         if (!res.ok || !res.item) {
