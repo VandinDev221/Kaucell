@@ -1,15 +1,21 @@
 const { sql, ensureTables, json } = require('../lib/db');
 const { requireAdmin } = require('../lib/auth');
 
-module.exports = async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+function sendJson(res, data, status = 200) {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.status(status).json(data);
+}
 
+module.exports = async function handler(req, res) {
   try {
-    await ensureTables();
-  } catch (e) {
+    if (req.method === 'OPTIONS') {
+      res.status(200).end();
+      return;
+    }
+
+    try {
+      await ensureTables();
+    } catch (e) {
     return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
   }
 
@@ -89,4 +95,8 @@ module.exports = async function handler(req, res) {
   }
 
   json(res, { ok: false, message: 'Método não permitido.' }, 405);
+  } catch (err) {
+    console.error('produtos handler:', err);
+    sendJson(res, { ok: false, message: 'Erro no servidor.', error: String(err && err.message) }, 500);
+  }
 };
