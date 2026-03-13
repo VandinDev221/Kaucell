@@ -1,4 +1,6 @@
 const { getAdminFromCookie, setAdminCookie, clearAdminCookie } = require('../lib/auth');
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS || '1234';
 
 function json(res, data, status = 200) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -50,9 +52,21 @@ module.exports = async function handler(req, res) {
           return json(res, { ok: true, logged: true });
         }
       } catch (e) {
-        console.error('Auth login error:', e);
-        return json(res, { ok: false, logged: false, message: 'Erro no servidor.' }, 500);
+        console.error('Auth login error (db):', e);
+        // Fallback: se o banco falhar, ainda permite login com ADMIN_USER/ADMIN_PASS
+        if (usuario === ADMIN_USER && senha === ADMIN_PASS) {
+          setAdminCookie(res);
+          return json(res, { ok: true, logged: true, fallback: true });
+        }
+        return json(res, { ok: false, logged: false, message: 'Erro no servidor.', error: String(e.message) }, 500);
       }
+
+      // Se não encontrou no banco, tenta credenciais fixas de ambiente
+      if (usuario === ADMIN_USER && senha === ADMIN_PASS) {
+        setAdminCookie(res);
+        return json(res, { ok: true, logged: true });
+      }
+
       return json(res, { ok: false, logged: false, message: 'Credenciais inválidas.' }, 401);
     }
 
