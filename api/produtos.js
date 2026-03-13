@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    if (!requireAdmin(req, res, () => {})) return;
+    if (!requireAdmin(req, res)) return;
 
     let body = {};
     try {

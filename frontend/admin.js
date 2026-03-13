@@ -260,7 +260,7 @@
     formProduto.addEventListener('submit', function (e) {
       e.preventDefault();
 
-    var nome = document.getElementById('produto-nome').value.trim();
+      var nome = document.getElementById('produto-nome').value.trim();
       var categoria = document.getElementById('produto-categoria').value.trim();
       var preco = document.getElementById('produto-preco').value;
       var imagemUrl = document.getElementById('produto-imagem-url').value.trim();

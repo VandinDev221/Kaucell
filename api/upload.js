@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
     return json(res, { ok: false, message: 'Método não permitido.' }, 405);
   }
 
-  if (!requireAdmin(req, res, () => {})) return;
+  if (!requireAdmin(req, res)) return;
 
   try {
     const contentType = req.headers['content-type'] || '';
