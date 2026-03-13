@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serviços — Consulte preços por modelo | KAUCELL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">KAU<span>CELL</span></a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Início</a>
+        <a href="servicos.html" class="nav-link nav-link--active">Serviços</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main main--page">
+    <section class="section section-servicos-busca">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Tabela de preços</span>
+          <h1 class="section-title">Serviços por modelo</h1>
+          <p class="section-desc">Digite o modelo do aparelho (ex: iPhone 11, Samsung S22) e veja os preços de todos os serviços para essa linha.</p>
+        </header>
+
+        <div class="busca-servicos">
+          <div class="busca-servicos-wrap">
+            <label for="busca-modelo" class="visually-hidden">Buscar por modelo do celular</label>
+            <input type="search" id="busca-modelo" class="input-busca" placeholder="Ex: iPhone 11, Samsung Galaxy S23, Xiaomi Redmi..." autocomplete="off">
+            <button type="button" id="btn-buscar" class="btn btn-primary">Buscar</button>
+          </div>
+          <p class="busca-dica">Exemplos: iPhone 11, iPhone 12, iPhone 13, iPhone 14, iPhone 15, Samsung Galaxy S21, S22, S23, Xiaomi Redmi Note 11, Redmi Note 12, Motorola Moto G</p>
+        </div>
+
+        <div id="resultado-servicos" class="resultado-servicos" aria-live="polite" hidden>
+          <div class="resultado-servicos-header">
+            <h2 id="resultado-titulo" class="resultado-titulo"></h2>
+          </div>
+          <div class="tabela-servicos-wrap">
+            <table class="tabela-servicos">
+              <thead>
+                <tr>
+                  <th>Modelo</th>
+                  <th>Serviço</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-servicos-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="resultado-nenhum" class="resultado-nenhum" hidden>
+          <p>Nenhum modelo encontrado para "<span id="termo-buscado"></span>".</p>
+          <p>Tente outro termo, por exemplo: iPhone 11, Samsung Galaxy S22, Xiaomi Redmi Note 12.</p>
+        </div>
+
+        <div id="estado-inicial" class="estado-inicial">
+          <p>Digite o modelo do aparelho acima e clique em Buscar para ver os preços dos serviços.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">KAU<span>CELL</span></a>
+        <p>Acessórios e assistência para seu celular.</p>
+      </div>
+      <p class="footer-copy">&copy; 2025 KAUCELL. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="servicos-dados.js"></script>
+  <script src="servicos.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

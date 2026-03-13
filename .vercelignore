@@ -1,0 +1,11 @@
+# Dados locais (não enviar para Vercel)
+database/
+uploads/
+*.sqlite
+
+# Backend PHP (usado só em dev local; no Vercel usamos API Node)
+# Mantemos a pasta api/ pois contém as funções .js
+# Os .php não são executados no Vercel
+
+node_modules
+.git

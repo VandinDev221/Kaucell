@@ -1,0 +1,12 @@
+# Banco e uploads locais (não versionar)
+database/*.sqlite
+database/*.sqlite-journal
+uploads/
+
+# Node
+node_modules/
+
+# IDE / OS
+.vercel
+.DS_Store
+Thumbs.db

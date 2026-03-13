@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/produtos.php", "destination": "/api/produtos" },
+    { "source": "/api/servicos.php", "destination": "/api/servicos" },
+    { "source": "/api/blog.php", "destination": "/api/blog" },
+    { "source": "/api/auth.php", "destination": "/api/auth" },
+    { "source": "/api/upload.php", "destination": "/api/upload" },
+    { "source": "/", "destination": "/frontend/index.html" },
+    { "source": "/index.html", "destination": "/frontend/index.html" },
+    { "source": "/produtos.html", "destination": "/frontend/produtos.html" },
+    { "source": "/servicos.html", "destination": "/frontend/servicos.html" },
+    { "source": "/blog.html", "destination": "/frontend/blog.html" },
+    { "source": "/admin.html", "destination": "/frontend/admin.html" },
+    { "source": "/styles.css", "destination": "/frontend/styles.css" },
+    { "source": "/script.js", "destination": "/frontend/script.js" },
+    { "source": "/servicos.js", "destination": "/frontend/servicos.js" },
+    { "source": "/servicos-dados.js", "destination": "/frontend/servicos-dados.js" },
+    { "source": "/admin.js", "destination": "/frontend/admin.js" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Cookie" }
+      ]
+    }
+  ]
+}
