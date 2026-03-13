@@ -1,6 +1,6 @@
 const { getAdminFromCookie, setAdminCookie, clearAdminCookie } = require('../lib/auth');
 const { sql, ensureTables } = require('../lib/db');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 function json(res, data, status = 200) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
