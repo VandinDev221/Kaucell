@@ -12,8 +12,10 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const raw = req.url || '/api/auth';
-    const url = new URL(raw, 'https://kaucell.vercel.app');
+    // Usa a URL original (com querystring) quando o Vercel faz rewrite
+    const forwarded = req.headers['x-vercel-forwarded-path'];
+    const raw = (typeof forwarded === 'string' && forwarded.length > 0) ? forwarded : (req.url || '/api/auth');
+    const url = new URL(raw.startsWith('http') ? raw : `https://kaucell.vercel.app${raw.startsWith('/') ? '' : '/'}${raw}`);
     const acao = url.searchParams.get('acao') || 'status';
 
     if (acao === 'status') {
