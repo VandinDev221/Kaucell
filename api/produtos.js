@@ -19,7 +19,8 @@ module.exports = async function handler(req, res) {
     return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
   }
 
-  const url = new URL(req.url || `http://x${req.headers.host || ''}${req.headers['x-vercel-forwarded-path'] || '/api/produtos'}`);
+  const raw = req.url || req.headers['x-vercel-forwarded-path'] || '/api/produtos';
+  const url = new URL(raw, 'https://kaucell.vercel.app');
   const id = parseInt(url.searchParams.get('id') || '0', 10);
   const acao = url.searchParams.get('acao') || '';
 
