@@ -26,7 +26,7 @@ E configurar o servidor web (ou um bundler, como Vite/Webpack) para servir o con
    - Framework Preset: **Other**
    - **Root Directory:** deixe vazio (raiz do repositório)
    - **Build Command:** `npm run build`
-   - **Output Directory:** deixe vazio (o build copia o frontend para a raiz e o Vercel usa a raiz)
+   - **Output Directory:** `public` (o build copia o frontend para essa pasta)
 
 2. **Variáveis de ambiente** (Vercel → Project → Settings → Environment Variables):
    - `ADMIN_USER` e `ADMIN_PASS` para o painel admin
