@@ -72,11 +72,21 @@ body {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 700;
   font-size: 1.35rem;
   color: #0f172a;
   text-decoration: none;
   letter-spacing: -0.02em;
+}
+
+.logo-img {
+  height: 2.25rem;
+  width: auto;
+  vertical-align: middle;
+  object-fit: contain;
 }
 
 .logo span {
