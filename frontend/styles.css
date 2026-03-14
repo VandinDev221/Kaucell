@@ -83,11 +83,12 @@ body {
 }
 
 .logo-img {
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   max-height: 48px;
-  width: auto;
+  border-radius: 50%;
+  object-fit: cover;
   vertical-align: middle;
-  object-fit: contain;
 }
 
 .logo span {
