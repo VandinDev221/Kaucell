@@ -140,11 +140,12 @@ body {
 .main {
   padding-top: 72px;
   min-height: calc(100vh - 72px);
+  background: linear-gradient(180deg, #62c3f7 0%, #79cff9 55%, #8fd7fb 100%);
 }
 
 .main--home .section-destaques {
   padding: 4rem 0 5rem;
-  background: linear-gradient(to bottom, #e5f3ff, #f9fafb);
+  background: transparent;
 }
 
 .main--page .section {
@@ -239,7 +240,7 @@ body {
 
 /* ===== Página Serviços (busca e tabela) ===== */
 .section-servicos-busca {
-  background: var(--color-bg);
+  background: transparent;
 }
 
 .busca-servicos {
@@ -383,7 +384,7 @@ body {
 
 /* ===== Serviços (cards antigos - manter se necessário) ===== */
 .section-servicos {
-  background: var(--color-bg-soft);
+  background: transparent;
 }
 
 .servicos-grid {
@@ -489,7 +490,7 @@ body {
 /* ===== Blog ===== */
 .section-blog,
 .section-blog-interna {
-  background: var(--color-bg-soft);
+  background: transparent;
 }
 
 .blog-grid {
@@ -695,7 +696,7 @@ body {
 .footer {
   padding: 3rem 0;
   border-top: 1px solid var(--color-border);
-  background: var(--color-bg);
+  background: transparent;
 }
 
 .footer-inner {
