@@ -52,7 +52,7 @@
 
         var destaques = data.items.filter(function (item) {
           return item.destaque === 1 || item.destaque === '1';
-        }).slice(0, 3);
+        });
 
         if (!destaques.length) {
           return;
