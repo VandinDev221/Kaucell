@@ -17,6 +17,18 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         api_require_admin_auth();
 
+        if ($acao === 'excluir') {
+            if ($id <= 0) {
+                api_json(['ok' => false, 'message' => 'ID do post é obrigatório.'], 422);
+            }
+            $stmt = $pdo->prepare('DELETE FROM blog_posts WHERE id = :id');
+            $stmt->execute([':id' => $id]);
+            if ($stmt->rowCount() === 0) {
+                api_json(['ok' => false, 'message' => 'Post não encontrado.'], 404);
+            }
+            api_json(['ok' => true]);
+        }
+
         $data = api_read_json();
         $titulo = trim((string)($data['titulo'] ?? ''));
         $dataPublicacao = trim((string)($data['data_publicacao'] ?? ''));

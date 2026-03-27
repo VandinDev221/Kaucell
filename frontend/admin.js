@@ -151,7 +151,10 @@
       '<td>' + formatarData(item.data_publicacao) + '</td>' +
       '<td>' + imgCel + '</td>' +
       '<td>' + (item.resumo || '').substring(0, 60).replace(/</g, '&lt;') + (item.resumo && item.resumo.length > 60 ? '…' : '') + '</td>' +
-      '<td><button type="button" class="btn btn-small btn-secondary admin-action-btn blog-action-btn" data-action="editar">Editar</button></td>';
+      '<td>' +
+      '<button type="button" class="btn btn-small btn-secondary admin-action-btn blog-action-btn" data-action="editar">Editar</button> ' +
+      '<button type="button" class="btn btn-small btn-primary admin-action-btn blog-action-btn" data-action="excluir">Excluir</button>' +
+      '</td>';
     return tr;
   }
 
@@ -179,6 +182,28 @@
     if (submitBtn) { submitBtn.textContent = 'Salvar alterações'; }
     var cancelBtn = document.getElementById('blog-cancel-btn');
     if (cancelBtn) { cancelBtn.style.display = 'inline-block'; }
+  }
+
+  function excluirBlog(tr) {
+    var id = tr.getAttribute('data-id');
+    var titulo = tr.getAttribute('data-titulo') || 'este post';
+
+    if (!confirm('Excluir o post "' + titulo + '"?')) return;
+
+    request(API.blog + '?id=' + encodeURIComponent(id) + '&acao=excluir', {
+      method: 'POST'
+    }).then(function (res) {
+      if (!res.ok) {
+        alert(res.message || 'Não foi possível excluir o post.');
+        return;
+      }
+      if (editBlogTr === tr) {
+        sairEdicaoBlog();
+      }
+      tr.remove();
+    }).catch(function () {
+      alert('Erro ao conectar com a API de blog.');
+    });
   }
 
   function sairEdicaoBlog() {
@@ -475,8 +500,12 @@
       if (!alvo.classList.contains('blog-action-btn')) return;
       var acao = alvo.getAttribute('data-action');
       var tr = alvo.closest('tr');
-      if (!tr || acao !== 'editar') return;
-      editarBlog(tr);
+      if (!tr) return;
+      if (acao === 'editar') {
+        editarBlog(tr);
+      } else if (acao === 'excluir') {
+        excluirBlog(tr);
+      }
     });
   }
 

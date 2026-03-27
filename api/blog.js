@@ -28,6 +28,17 @@ module.exports = async function handler(req, res) {
     const id = parseInt(req.query.id, 10) || 0;
     const acao = String(req.query.acao || '').trim();
 
+    if (acao === 'excluir') {
+      if (id <= 0) return json(res, { ok: false, message: 'ID do post é obrigatório.' }, 422);
+      try {
+        const { rows } = await sql`DELETE FROM blog_posts WHERE id = ${id} RETURNING id`;
+        if (!rows || !rows.length) return json(res, { ok: false, message: 'Post não encontrado.' }, 404);
+        return json(res, { ok: true });
+      } catch (e) {
+        return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
+      }
+    }
+
     let body = {};
     try {
       body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
