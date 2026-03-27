@@ -2,10 +2,10 @@
 
 /* ===== Variáveis e base (tema claro moderno) ===== */
 :root {
-  --color-bg: #f3f4f6;
-  --color-bg-soft: #e5f3ff;
+  --color-bg: #62c3f7;
+  --color-bg-soft: #8fd7fb;
   --color-bg-card: #ffffff;
-  --color-surface: #dbeafe;
+  --color-surface: #bfe9ff;
   --color-text: #0f172a;
   --color-text-muted: #64748b;
   --color-accent: #0ea5e9;
@@ -39,7 +39,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-text);
-  background: var(--color-bg);
+  background: linear-gradient(180deg, #62c3f7 0%, #79cff9 55%, #8fd7fb 100%);
   -webkit-font-smoothing: antialiased;
 }
 
