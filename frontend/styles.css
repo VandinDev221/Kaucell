@@ -398,13 +398,24 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 2rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .card-servico:hover {
   border-color: rgba(25, 118, 210, 0.35);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+}
+
+.card-servico::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(98, 195, 247, 0.12) 0%, rgba(255, 255, 255, 0) 55%);
 }
 
 .card-servico-icon {
@@ -446,14 +457,17 @@ body {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .card-produto:hover {
   border-color: rgba(25, 118, 210, 0.35);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
 .card-produto-img {
@@ -472,6 +486,7 @@ body {
   font-weight: 600;
   padding: 1rem 1.25rem 0;
   color: var(--color-text);
+  line-height: 1.35;
 }
 
 .card-produto-preco {
@@ -485,6 +500,7 @@ body {
 .card-produto .btn-small {
   margin: 1rem 1.25rem 1.25rem;
   width: calc(100% - 2.5rem);
+  margin-top: auto;
 }
 
 /* ===== Blog ===== */
@@ -503,6 +519,9 @@ body {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
@@ -510,7 +529,7 @@ body {
 .card-blog:hover {
   border-color: rgba(25, 118, 210, 0.35);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
 .card-blog-img {
@@ -531,6 +550,9 @@ body {
 
 .card-blog-body {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .card-blog-body time {
