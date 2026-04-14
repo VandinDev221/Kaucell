@@ -744,95 +744,106 @@ body {
   margin-right: 0;
 }
 
-/* ===== Footer ===== */
+/* ===== Footer (layout em colunas — cores da marca) ===== */
 .footer {
-  padding: 0.65rem 0 0.75rem;
+  padding: 1.75rem 0 0;
   border-top: 1px solid var(--color-border);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 -8px 28px rgba(11, 53, 92, 0.06);
 }
 
-.footer-inner {
+.footer-main {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.75rem 1.25rem;
+  grid-template-columns: minmax(0, 1.15fr) repeat(2, minmax(0, 1fr)) minmax(0, 1.1fr);
+  gap: 1.5rem 2rem;
   align-items: start;
+  padding-bottom: 1.35rem;
 }
 
-.footer-brand .logo {
+.footer-col-brand .logo {
   display: inline-flex;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.35rem;
 }
 
-.footer-brand p {
-  font-size: 0.82rem;
-  line-height: 1.4;
+.footer-tagline {
+  font-size: 0.85rem;
+  line-height: 1.45;
   color: var(--color-text-muted);
+  max-width: 16rem;
 }
 
-.footer-contact {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-  max-width: 18rem;
-  text-align: right;
-  justify-self: end;
-  line-height: 1.35;
-}
-
-.footer-contact-title {
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0 0 0.15rem;
-  font-size: 0.68rem;
+.footer-heading {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
+  color: var(--color-text);
 }
 
-.footer-contact-title:not(:first-child) {
-  margin-top: 0.45rem;
-}
-
-.footer-address {
-  font-style: normal;
-  line-height: 1.4;
-  margin: 0 0 0.35rem;
-}
-
-.footer-phones {
+.footer-list {
+  list-style: none;
   margin: 0;
-  line-height: 1.35;
-  font-size: 0.82rem;
+  padding: 0;
 }
 
-.footer-phones a {
-  color: var(--color-accent);
+.footer-list li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-list li:last-child {
+  margin-bottom: 0;
+}
+
+.footer-list a {
+  color: var(--color-text-muted);
   text-decoration: none;
+  font-size: 0.88rem;
   font-weight: 500;
+  transition: color var(--transition);
 }
 
-.footer-phones a:hover {
-  text-decoration: underline;
+.footer-list a:hover {
+  color: var(--color-accent);
 }
 
-.footer-phone-sep {
-  opacity: 0.5;
-  padding: 0 0.15rem;
+.footer-list-note {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.footer-col-aside {
+  text-align: right;
+}
+
+.footer-col-aside .footer-heading {
+  text-align: right;
+}
+
+.footer-col-aside .footer-list a {
+  color: var(--color-accent);
+}
+
+.footer-col-aside .footer-list a:hover {
+  color: var(--color-accent-hover);
 }
 
 .footer-social {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  align-items: center;
-  margin-top: 0.4rem;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.65rem;
 }
 
 .footer-social-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   color: #fff;
   transition: transform var(--transition), box-shadow var(--transition);
@@ -840,7 +851,7 @@ body {
 
 .footer-social-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
 }
 
 .footer-social-link--whatsapp {
@@ -852,24 +863,31 @@ body {
 }
 
 .footer-social-link svg {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   fill: currentColor;
 }
 
-.footer-instagram-profile {
-  margin: 0.35rem 0 0;
-  font-size: 0.78rem;
-  line-height: 1.3;
-}
-
-.footer-instagram-profile a {
-  color: var(--color-accent);
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.85rem;
+  padding: 0.55rem 1.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
   text-decoration: none;
+  border-radius: 999px;
+  background: var(--gradient-brand);
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
 }
 
-.footer-instagram-profile a:hover {
-  text-decoration: underline;
+.footer-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+  filter: brightness(1.05);
 }
 
 .footer-nav {
@@ -889,12 +907,48 @@ body {
 }
 
 .footer-copy {
-  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0.85rem 0 1rem;
   font-size: 0.72rem;
   color: var(--color-text-muted);
-  padding-top: 0.45rem;
-  margin-top: 0.15rem;
+  text-align: center;
   border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 960px) and (min-width: 769px) {
+  .footer-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-col-brand {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .footer-tagline {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-col-aside {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-col-aside .footer-heading {
+    text-align: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+
+  .footer-cta {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* ===== Responsivo ===== */
@@ -949,29 +1003,34 @@ body {
   }
 
   .footer {
-    padding: 0.55rem 0 0.65rem;
+    padding: 1.35rem 0 0;
   }
 
-  .footer-inner {
+  .footer-main {
     grid-template-columns: 1fr;
-    gap: 0.55rem;
+    gap: 1.35rem;
     text-align: center;
+    padding-bottom: 1rem;
   }
 
-  .footer-contact {
-    max-width: none;
-    margin: 0 auto;
-    text-align: center;
-    justify-self: center;
+  .footer-tagline {
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .footer-contact-title:not(:first-child) {
-    margin-top: 0.35rem;
+  .footer-col-aside,
+  .footer-col-aside .footer-heading {
+    text-align: center;
   }
 
   .footer-social {
     justify-content: center;
-    margin-top: 0.3rem;
+    margin-top: 0.55rem;
+  }
+
+  .footer-cta {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .footer-nav {
