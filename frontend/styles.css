@@ -847,6 +847,104 @@ body {
   .footer-nav {
     justify-content: center;
   }
+
+  /* Home: carrossel horizontal de produtos em destaque */
+  .main--home .section-destaques {
+    padding: 2.5rem 0 3.5rem;
+  }
+
+  .main--home .section-destaques .container {
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .main--home .section-destaques .section-header {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .produtos-grid--destaques {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    grid-template-columns: none;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.25rem;
+    padding: 0.25rem 1.25rem 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(15, 23, 42, 0.25) transparent;
+  }
+
+  .produtos-grid--destaques::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .produtos-grid--destaques::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.2);
+    border-radius: 999px;
+  }
+
+  .produtos-grid--destaques .card-produto {
+    flex: 0 0 min(86vw, 300px);
+    width: min(86vw, 300px);
+    max-width: min(86vw, 300px);
+    scroll-snap-align: center;
+    border-radius: 24px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+  }
+
+  .produtos-grid--destaques .card-produto:hover {
+    transform: none;
+  }
+
+  .produtos-grid--destaques .card-produto-img {
+    aspect-ratio: 1;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .produtos-grid--destaques .card-produto h3 {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    padding: 1rem 1.1rem 0;
+  }
+
+  .produtos-grid--destaques .card-produto-preco {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #0ea5e9;
+    padding: 0.35rem 1.1rem 0;
+  }
+
+  .produtos-grid--destaques .card-produto .btn.btn-small {
+    margin: 1rem 1.1rem 1.15rem;
+    width: calc(100% - 2.2rem);
+    max-width: none;
+    align-self: center;
+    background: #fff;
+    color: #5b21b6;
+    border: 2px solid #7c3aed;
+    border-radius: 999px;
+    font-weight: 600;
+    box-shadow: none;
+  }
+
+  .produtos-grid--destaques .card-produto .btn.btn-small:hover {
+    background: rgba(124, 58, 237, 0.08);
+    color: #5b21b6;
+    border-color: #6d28d9;
+    transform: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -855,7 +953,7 @@ body {
   }
 
   .servicos-grid,
-  .produtos-grid {
+  .produtos-grid:not(.produtos-grid--destaques) {
     grid-template-columns: 1fr;
   }
 
