@@ -4,8 +4,9 @@
   var header = document.querySelector('.header');
   var menuToggle = document.querySelector('.menu-toggle');
   var navLinks = document.querySelectorAll('.nav-link');
-  var gridDestaques = document.querySelector('.section-destaques .produtos-grid');
-  var gridCatalogo = document.querySelector('.section-produtos-interna .produtos-grid');
+  var destaquesMount = document.querySelector('.section-destaques .produtos-carrosseis');
+  var catalogoMount = document.querySelector('.section-produtos-interna .produtos-carrosseis');
+  var MAX_PRODUTOS_CARROSSEL = 10;
 
   if (menuToggle) {
     menuToggle.addEventListener('click', function () {
@@ -40,8 +41,81 @@
     return 'R$ ' + n.toFixed(2).replace('.', ',');
   }
 
+  function fatiarProdutosEmCarrosseis(items, maxPorCarrossel) {
+    var limite = maxPorCarrossel || MAX_PRODUTOS_CARROSSEL;
+    var blocos = [];
+    for (var i = 0; i < items.length; i += limite) {
+      blocos.push(items.slice(i, i + limite));
+    }
+    return blocos;
+  }
+
+  function criarCardProdutoDestaque(item) {
+    var artigo = document.createElement('article');
+    artigo.className = 'card-produto';
+
+    var imgDiv = document.createElement('div');
+    imgDiv.className = 'card-produto-img';
+    if (item.imagem_url) {
+      imgDiv.style.backgroundImage = 'url(' + item.imagem_url + ')';
+      imgDiv.style.backgroundSize = 'cover';
+      imgDiv.style.backgroundPosition = 'center';
+      imgDiv.textContent = '';
+    } else {
+      imgDiv.textContent = 'KAUCELL';
+    }
+
+    var titulo = document.createElement('h3');
+    titulo.textContent = item.nome;
+
+    var preco = document.createElement('p');
+    preco.className = 'card-produto-preco';
+    preco.textContent = formatarPreco(item.preco);
+
+    var link = document.createElement('a');
+    link.href = 'produtos.html';
+    link.className = 'btn btn-small';
+    link.textContent = 'Ver catálogo completo';
+
+    artigo.appendChild(imgDiv);
+    artigo.appendChild(titulo);
+    artigo.appendChild(preco);
+    artigo.appendChild(link);
+
+    return artigo;
+  }
+
+  function criarCardProdutoCatalogo(item) {
+    var artigo = document.createElement('article');
+    artigo.className = 'card-produto';
+
+    var imgDiv = document.createElement('div');
+    imgDiv.className = 'card-produto-img';
+    if (item.imagem_url) {
+      imgDiv.style.backgroundImage = 'url(' + item.imagem_url + ')';
+      imgDiv.style.backgroundSize = 'cover';
+      imgDiv.style.backgroundPosition = 'center';
+      imgDiv.textContent = '';
+    } else {
+      imgDiv.textContent = 'KAUCELL';
+    }
+
+    var titulo = document.createElement('h3');
+    titulo.textContent = item.nome;
+
+    var preco = document.createElement('p');
+    preco.className = 'card-produto-preco';
+    preco.textContent = formatarPreco(item.preco);
+
+    artigo.appendChild(imgDiv);
+    artigo.appendChild(titulo);
+    artigo.appendChild(preco);
+
+    return artigo;
+  }
+
   function carregarProdutosDestaque() {
-    if (!gridDestaques) return;
+    if (!destaquesMount) return;
 
     fetch('api/produtos.php')
       .then(function (res) { return res.json(); })
@@ -57,41 +131,16 @@
         if (!destaques.length) {
           return;
         }
-        gridDestaques.innerHTML = '';
 
-        destaques.forEach(function (item) {
-          var artigo = document.createElement('article');
-          artigo.className = 'card-produto';
+        destaquesMount.innerHTML = '';
 
-          var imgDiv = document.createElement('div');
-          imgDiv.className = 'card-produto-img';
-          if (item.imagem_url) {
-            imgDiv.style.backgroundImage = 'url(' + item.imagem_url + ')';
-            imgDiv.style.backgroundSize = 'cover';
-            imgDiv.style.backgroundPosition = 'center';
-            imgDiv.textContent = '';
-          } else {
-            imgDiv.textContent = 'KAUCELL';
-          }
-
-          var titulo = document.createElement('h3');
-          titulo.textContent = item.nome;
-
-          var preco = document.createElement('p');
-          preco.className = 'card-produto-preco';
-          preco.textContent = formatarPreco(item.preco);
-
-          var link = document.createElement('a');
-          link.href = 'produtos.html';
-          link.className = 'btn btn-small';
-          link.textContent = 'Ver catálogo completo';
-
-          artigo.appendChild(imgDiv);
-          artigo.appendChild(titulo);
-          artigo.appendChild(preco);
-          artigo.appendChild(link);
-
-          gridDestaques.appendChild(artigo);
+        fatiarProdutosEmCarrosseis(destaques, MAX_PRODUTOS_CARROSSEL).forEach(function (chunk) {
+          var grid = document.createElement('div');
+          grid.className = 'produtos-grid produtos-grid--carousel-mobile';
+          chunk.forEach(function (item) {
+            grid.appendChild(criarCardProdutoDestaque(item));
+          });
+          destaquesMount.appendChild(grid);
         });
       })
       .catch(function () {
@@ -100,7 +149,7 @@
   }
 
   function carregarCatalogoCompleto() {
-    if (!gridCatalogo) return;
+    if (!catalogoMount) return;
 
     fetch('api/produtos.php')
       .then(function (res) { return res.json(); })
@@ -109,35 +158,15 @@
           return;
         }
 
-        gridCatalogo.innerHTML = '';
+        catalogoMount.innerHTML = '';
 
-        data.items.forEach(function (item) {
-          var artigo = document.createElement('article');
-          artigo.className = 'card-produto';
-
-          var imgDiv = document.createElement('div');
-          imgDiv.className = 'card-produto-img';
-          if (item.imagem_url) {
-            imgDiv.style.backgroundImage = 'url(' + item.imagem_url + ')';
-            imgDiv.style.backgroundSize = 'cover';
-            imgDiv.style.backgroundPosition = 'center';
-            imgDiv.textContent = '';
-          } else {
-            imgDiv.textContent = 'KAUCELL';
-          }
-
-          var titulo = document.createElement('h3');
-          titulo.textContent = item.nome;
-
-          var preco = document.createElement('p');
-          preco.className = 'card-produto-preco';
-          preco.textContent = formatarPreco(item.preco);
-
-          artigo.appendChild(imgDiv);
-          artigo.appendChild(titulo);
-          artigo.appendChild(preco);
-
-          gridCatalogo.appendChild(artigo);
+        fatiarProdutosEmCarrosseis(data.items, MAX_PRODUTOS_CARROSSEL).forEach(function (chunk) {
+          var grid = document.createElement('div');
+          grid.className = 'produtos-grid produtos-grid--carousel-mobile';
+          chunk.forEach(function (item) {
+            grid.appendChild(criarCardProdutoCatalogo(item));
+          });
+          catalogoMount.appendChild(grid);
         });
       })
       .catch(function () {
