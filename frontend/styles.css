@@ -1006,31 +1006,37 @@ body {
     padding: 1.35rem 0 0;
   }
 
+  /* Mobile: sem menu no rodapé; blocos alinhados à esquerda (padrão da referência) */
+  .footer-col-nav {
+    display: none;
+  }
+
   .footer-main {
     grid-template-columns: 1fr;
     gap: 1.35rem;
-    text-align: center;
+    text-align: left;
     padding-bottom: 1rem;
   }
 
   .footer-tagline {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
   }
 
   .footer-col-aside,
   .footer-col-aside .footer-heading {
-    text-align: center;
+    text-align: left;
   }
 
   .footer-social {
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 0.55rem;
   }
 
   .footer-cta {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .footer-nav {
