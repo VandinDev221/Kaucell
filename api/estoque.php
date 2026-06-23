@@ -77,6 +77,168 @@ function estoque_listar(PDO $pdo): array
     return ['secoes' => $secoesComItens, 'alertas' => ['faltando' => $faltando, 'baixo' => $baixo]];
 }
 
+function estoque_normalizar_telefone(string $raw): string
+{
+    $digits = preg_replace('/\D+/', '', $raw) ?? '';
+    if ($digits === '') {
+        return '';
+    }
+    if (str_starts_with($digits, '55') && strlen($digits) >= 12) {
+        return $digits;
+    }
+    if (strlen($digits) >= 10 && strlen($digits) <= 11) {
+        return '55' . $digits;
+    }
+    return $digits;
+}
+
+function estoque_mascarar_apikey(string $key): string
+{
+    $k = trim($key);
+    if ($k === '') {
+        return '';
+    }
+    if (strlen($k) <= 4) {
+        return '****';
+    }
+    return str_repeat('*', max(4, strlen($k) - 4)) . substr($k, -4);
+}
+
+function estoque_get_notificacao_config(PDO $pdo): array
+{
+    $stmt = $pdo->query('SELECT telefone, callmebot_apikey, ativo, atualizado_em FROM estoque_notificacoes WHERE id = 1');
+    $row = $stmt ? $stmt->fetch() : false;
+    if (!$row) {
+        return [
+            'telefone' => '',
+            'callmebot_apikey' => '',
+            'ativo' => 0,
+            'conectado' => false,
+            'telefone_formatado' => '',
+            'apikey_mascarada' => '',
+        ];
+    }
+    $telefone = (string)($row['telefone'] ?? '');
+    $apikey = (string)($row['callmebot_apikey'] ?? '');
+    return [
+        'telefone' => $telefone,
+        'callmebot_apikey' => $apikey,
+        'ativo' => !empty($row['ativo']) ? 1 : 0,
+        'conectado' => $telefone !== '' && $apikey !== '',
+        'telefone_formatado' => $telefone,
+        'apikey_mascarada' => estoque_mascarar_apikey($apikey),
+        'atualizado_em' => $row['atualizado_em'] ?? null,
+    ];
+}
+
+function estoque_notificacoes_publicas(array $config): array
+{
+    return [
+        'telefone' => $config['telefone_formatado'] ?? $config['telefone'] ?? '',
+        'ativo' => !empty($config['ativo']) ? 1 : 0,
+        'conectado' => !empty($config['conectado']),
+        'apikey_mascarada' => $config['apikey_mascarada'] ?? '',
+        'atualizado_em' => $config['atualizado_em'] ?? null,
+    ];
+}
+
+function estoque_enviar_whatsapp(string $telefone, string $texto, string $apikey): void
+{
+    $phone = estoque_normalizar_telefone($telefone);
+    $key = trim($apikey);
+    $msg = trim($texto);
+    if ($phone === '' || $key === '' || $msg === '') {
+        throw new RuntimeException('Telefone, API Key e mensagem são obrigatórios.');
+    }
+    $url = 'https://api.callmebot.com/whatsapp.php?phone=' . rawurlencode($phone)
+        . '&text=' . rawurlencode($msg)
+        . '&apikey=' . rawurlencode($key);
+    $ctx = stream_context_create(['http' => ['timeout' => 15]]);
+    $body = @file_get_contents($url, false, $ctx);
+    if ($body === false || preg_match('/error|invalid|fail/i', $body)) {
+        throw new RuntimeException(trim((string)$body) ?: 'Não foi possível enviar a mensagem pelo WhatsApp.');
+    }
+}
+
+function estoque_salvar_notificacao_config(PDO $pdo, array $data): array
+{
+    $tel = estoque_normalizar_telefone((string)($data['telefone'] ?? ''));
+    $ativo = !empty($data['ativo']) ? 1 : 0;
+    $apikey = trim((string)($data['callmebot_apikey'] ?? ''));
+    $atual = estoque_get_notificacao_config($pdo);
+    if ($apikey === '' && !empty($data['manter_apikey']) && $atual['callmebot_apikey'] !== '') {
+        $apikey = $atual['callmebot_apikey'];
+    }
+    $stmt = $pdo->prepare('
+        INSERT INTO estoque_notificacoes (id, telefone, callmebot_apikey, ativo, atualizado_em)
+        VALUES (1, :telefone, :apikey, :ativo, datetime(\'now\'))
+        ON CONFLICT(id) DO UPDATE SET
+            telefone = excluded.telefone,
+            callmebot_apikey = excluded.callmebot_apikey,
+            ativo = excluded.ativo,
+            atualizado_em = datetime(\'now\')
+    ');
+    $stmt->execute([
+        ':telefone' => $tel !== '' ? $tel : null,
+        ':apikey' => $apikey !== '' ? $apikey : null,
+        ':ativo' => $ativo,
+    ]);
+    return estoque_get_notificacao_config($pdo);
+}
+
+function estoque_limpar_alertas_item(PDO $pdo, int $itemId, string $statusAtual): void
+{
+    if ($statusAtual === 'ok') {
+        $pdo->prepare('DELETE FROM estoque_alertas_enviados WHERE item_id = :id')->execute([':id' => $itemId]);
+        return;
+    }
+    $stmt = $pdo->prepare('DELETE FROM estoque_alertas_enviados WHERE item_id = :id AND status <> :status');
+    $stmt->execute([':id' => $itemId, ':status' => $statusAtual]);
+}
+
+function estoque_processar_notificacoes(PDO $pdo, array $alertas): array
+{
+    $config = estoque_get_notificacao_config($pdo);
+    if (empty($config['ativo']) || empty($config['telefone']) || empty($config['callmebot_apikey'])) {
+        return ['enviados' => 0, 'ignorados' => 0];
+    }
+    $pendentes = array_merge($alertas['faltando'] ?? [], $alertas['baixo'] ?? []);
+    $enviados = 0;
+    $ignorados = 0;
+    $check = $pdo->prepare('SELECT 1 FROM estoque_alertas_enviados WHERE item_id = :id AND status = :status LIMIT 1');
+    $insert = $pdo->prepare('INSERT OR IGNORE INTO estoque_alertas_enviados (item_id, status, enviado_em) VALUES (:id, :status, datetime(\'now\'))');
+    foreach ($pendentes as $item) {
+        $check->execute([':id' => $item['id'], ':status' => $item['status']]);
+        if ($check->fetch()) {
+            $ignorados++;
+            continue;
+        }
+        if ($item['status'] === 'faltando') {
+            $msg = '⚠️ KAUCELL Estoque — EM FALTA' . "\n" . $item['secao_nome'] . ': ' . $item['nome'] . ' (0 ' . ($item['unidade'] ?? 'un') . ')';
+        } else {
+            $msg = '📦 KAUCELL Estoque — BAIXO' . "\n" . $item['secao_nome'] . ': ' . $item['nome'] . ' (' . $item['quantidade'] . ' ' . ($item['unidade'] ?? 'un') . ', mín. ' . $item['quantidade_minima'] . ')';
+        }
+        try {
+            estoque_enviar_whatsapp($config['telefone'], $msg, $config['callmebot_apikey']);
+            $insert->execute([':id' => $item['id'], ':status' => $item['status']]);
+            $enviados++;
+        } catch (Throwable $e) {
+            // ignora falha individual
+        }
+    }
+    return ['enviados' => $enviados, 'ignorados' => $ignorados];
+}
+
+function estoque_pos_alteracao_item(PDO $pdo, array $item): void
+{
+    if (empty($item['id'])) {
+        return;
+    }
+    estoque_limpar_alertas_item($pdo, (int)$item['id'], (string)($item['status'] ?? 'ok'));
+    $dados = estoque_listar($pdo);
+    estoque_processar_notificacoes($pdo, $dados['alertas']);
+}
+
 try {
     $pdo = api_db();
     api_bootstrap_tables($pdo);
@@ -84,6 +246,7 @@ try {
     $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
     $acao = isset($_GET['acao']) ? (string)$_GET['acao'] : '';
     $relatorio = isset($_GET['relatorio']) && $_GET['relatorio'] === '1';
+    $tempoReal = isset($_GET['tempo_real']) && $_GET['tempo_real'] === '1';
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $dados = estoque_listar($pdo);
@@ -95,7 +258,19 @@ try {
                 'baixo' => $dados['alertas']['baixo'],
             ]);
         }
-        api_json(['ok' => true, 'secoes' => $dados['secoes'], 'alertas' => $dados['alertas']]);
+        $payload = [
+            'ok' => true,
+            'secoes' => $dados['secoes'],
+            'alertas' => $dados['alertas'],
+            'atualizado_em' => date('c'),
+        ];
+        if (api_is_admin()) {
+            if ($tempoReal) {
+                estoque_processar_notificacoes($pdo, $dados['alertas']);
+            }
+            $payload['notificacoes'] = estoque_notificacoes_publicas(estoque_get_notificacao_config($pdo));
+        }
+        api_json($payload);
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -183,6 +358,7 @@ try {
             $item['quantidade'] = (int)$item['quantidade'];
             $item['quantidade_minima'] = (int)$item['quantidade_minima'];
             $item['status'] = estoque_classificar_item($item);
+            estoque_pos_alteracao_item($pdo, $item);
             api_json(['ok' => true, 'item' => $item]);
         }
 
@@ -224,6 +400,7 @@ try {
             $item['quantidade'] = (int)$item['quantidade'];
             $item['quantidade_minima'] = (int)$item['quantidade_minima'];
             $item['status'] = estoque_classificar_item($item);
+            estoque_pos_alteracao_item($pdo, $item);
             api_json(['ok' => true, 'item' => $item]);
         }
 
@@ -252,6 +429,7 @@ try {
             $item['quantidade'] = (int)$item['quantidade'];
             $item['quantidade_minima'] = (int)$item['quantidade_minima'];
             $item['status'] = estoque_classificar_item($item);
+            estoque_pos_alteracao_item($pdo, $item);
             api_json(['ok' => true, 'item' => $item]);
         }
 
@@ -264,7 +442,42 @@ try {
             if ($stmt->rowCount() === 0) {
                 api_json(['ok' => false, 'message' => 'Peça não encontrada.'], 404);
             }
+            $pdo->prepare('DELETE FROM estoque_alertas_enviados WHERE item_id = :id')->execute([':id' => $id]);
             api_json(['ok' => true]);
+        }
+
+        if ($acao === 'notificacoes_salvar') {
+            $telefone = trim((string)($data['telefone'] ?? ''));
+            $apikey = trim((string)($data['callmebot_apikey'] ?? ''));
+            $ativo = !empty($data['ativo']) ? 1 : 0;
+            $manterApikey = ($data['manter_apikey'] ?? true) !== false;
+            if ($telefone === '') {
+                api_json(['ok' => false, 'message' => 'Informe o WhatsApp com DDD.'], 422);
+            }
+            $config = estoque_salvar_notificacao_config($pdo, [
+                'telefone' => $telefone,
+                'callmebot_apikey' => $apikey,
+                'ativo' => $ativo,
+                'manter_apikey' => $manterApikey && $apikey === '',
+            ]);
+            if ($config['callmebot_apikey'] === '') {
+                api_json(['ok' => false, 'message' => 'Informe a API Key do CallMeBot.'], 422);
+            }
+            api_json(['ok' => true, 'notificacoes' => estoque_notificacoes_publicas($config)]);
+        }
+
+        if ($acao === 'notificacoes_testar') {
+            $telefone = trim((string)($data['telefone'] ?? ''));
+            $apikey = trim((string)($data['callmebot_apikey'] ?? ''));
+            $config = estoque_get_notificacao_config($pdo);
+            $tel = $telefone !== '' ? $telefone : $config['telefone'];
+            $key = $apikey !== '' ? $apikey : $config['callmebot_apikey'];
+            try {
+                estoque_enviar_whatsapp($tel, '✅ KAUCELL: WhatsApp conectado! Você receberá alertas de estoque baixo ou em falta.', $key);
+                api_json(['ok' => true, 'message' => 'Mensagem de teste enviada. Confira seu WhatsApp.']);
+            } catch (Throwable $e) {
+                api_json(['ok' => false, 'message' => $e->getMessage()], 500);
+            }
         }
 
         api_json(['ok' => false, 'message' => 'Ação inválida.'], 400);

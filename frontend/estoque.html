@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Estoque | KAUCELL</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body estoque-body">
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="/logo.png" alt="KAUCELL" class="logo-img">KAU<span>CELL</span></a>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Início</a>
+        <a href="servicos.html" class="nav-link">Serviços</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="estoque.html" class="nav-link nav-link--active">Estoque</a>
+        <a href="admin.html" class="nav-link">Admin</a>
+      </nav>
+      <a href="#" class="btn btn-secondary admin-logout-top" id="estoque-logout">Sair</a>
+      <button class="menu-toggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main main--page">
+    <section class="section admin-section">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">Painel</span>
+          <h1 class="section-title">Controle de estoque <span id="estoque-header-badge" class="admin-tab-badge" hidden>0</span></h1>
+          <p class="section-desc">Gerencie peças, alertas em tempo real e notificações WhatsApp. Acesso restrito ao dono da loja.</p>
+        </header>
+        <p id="estoque-status" class="admin-auth-error" hidden></p>
+
+        <section id="estoque-login-area" class="admin-login-area">
+          <h2 class="admin-card-title">Acesso ao estoque</h2>
+          <p class="section-desc">Use o mesmo usuário e senha do painel admin.</p>
+          <form id="estoque-login-form" class="admin-form" autocomplete="off">
+            <label for="estoque-usuario">Usuário</label>
+            <input id="estoque-usuario" type="text" required placeholder="admin">
+
+            <label for="estoque-senha">Senha</label>
+            <input id="estoque-senha" type="password" required placeholder="••••••">
+
+            <button class="btn btn-primary" type="submit">Entrar</button>
+          </form>
+          <p class="section-desc" style="margin-top:1rem;"><a href="index.html">← Voltar para a loja</a></p>
+        </section>
+
+        <div id="estoque-area" hidden>
+          <div class="estoque-live-bar">
+            <span class="estoque-live-dot" id="estoque-live-dot" aria-hidden="true"></span>
+            <span id="estoque-live-text">Atualização em tempo real ativa</span>
+          </div>
+
+          <div id="estoque-alertas" class="estoque-alertas">
+            <div class="estoque-alerta estoque-alerta--critico">
+              <span class="estoque-alerta-num" id="estoque-count-faltando">0</span>
+              <span class="estoque-alerta-label">Peças em falta</span>
+            </div>
+            <div class="estoque-alerta estoque-alerta--aviso">
+              <span class="estoque-alerta-num" id="estoque-count-baixo">0</span>
+              <span class="estoque-alerta-label">Estoque baixo</span>
+            </div>
+            <div class="estoque-alerta-actions">
+              <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-relatorio">Baixar relatório CSV</button>
+              <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-imprimir">Imprimir alertas</button>
+            </div>
+          </div>
+
+          <div id="estoque-lista-alertas" class="estoque-lista-alertas" hidden></div>
+
+          <article class="admin-card admin-card-full notificacao-card">
+            <h2 class="admin-card-title">Notificações WhatsApp</h2>
+            <p class="section-desc">Conecte seu WhatsApp para receber alertas automáticos quando uma peça estiver em falta ou com estoque baixo.</p>
+
+            <div class="notificacao-passos">
+              <p><strong>Como conectar:</strong></p>
+              <ol>
+                <li>Acesse <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank" rel="noopener noreferrer">callmebot.com</a> e siga os passos para autorizar o bot no seu WhatsApp.</li>
+                <li>Copie a <strong>API Key</strong> que o CallMeBot enviar.</li>
+                <li>Informe seu número (com DDD) abaixo, cole a API Key e clique em <strong>Salvar conexão</strong>.</li>
+                <li>Use <strong>Enviar teste</strong> para confirmar que está funcionando.</li>
+              </ol>
+            </div>
+
+            <form id="form-notificacoes" class="admin-form">
+              <label for="notif-telefone">Seu WhatsApp (DDD + número)</label>
+              <input id="notif-telefone" type="tel" required placeholder="Ex: 98991986345">
+
+              <label for="notif-apikey">API Key CallMeBot</label>
+              <input id="notif-apikey" type="password" placeholder="Cole a chave ou deixe em branco para manter a salva">
+
+              <label class="checkbox-inline">
+                <input id="notif-ativo" type="checkbox" checked>
+                Receber alertas automáticos de estoque
+              </label>
+
+              <div class="admin-form-actions">
+                <button class="btn btn-primary" type="submit">Salvar conexão</button>
+                <button class="btn btn-secondary" type="button" id="btn-notif-testar">Enviar teste</button>
+              </div>
+            </form>
+            <p id="notificacao-status" class="notificacao-status"></p>
+          </article>
+
+          <div class="admin-grid">
+            <article class="admin-card">
+              <h2 class="admin-card-title">Nova seção do estoque</h2>
+              <p class="section-desc">Organize por categorias: Telas, Bateria, Dock de carga, Botões, etc.</p>
+              <form id="form-estoque-secao" class="admin-form">
+                <label for="estoque-secao-nome">Nome da seção</label>
+                <input id="estoque-secao-nome" type="text" required placeholder="Ex: Telas">
+                <button class="btn btn-primary" type="submit">Criar seção</button>
+              </form>
+            </article>
+
+            <article class="admin-card">
+              <h2 class="admin-card-title">Cadastrar peça</h2>
+              <form id="form-estoque-item" class="admin-form">
+                <label for="estoque-item-secao">Seção</label>
+                <select id="estoque-item-secao" required>
+                  <option value="">Selecione uma seção</option>
+                </select>
+
+                <label for="estoque-item-nome">Nome da peça</label>
+                <input id="estoque-item-nome" type="text" required placeholder="Ex: Tela iPhone 11">
+
+                <label for="estoque-item-qtd">Quantidade atual</label>
+                <input id="estoque-item-qtd" type="number" min="0" value="0" required>
+
+                <label for="estoque-item-min">Quantidade mínima (alerta)</label>
+                <input id="estoque-item-min" type="number" min="0" value="2" required>
+
+                <label for="estoque-item-unidade">Unidade</label>
+                <input id="estoque-item-unidade" type="text" value="un" placeholder="un, pç, kit">
+
+                <button class="btn btn-primary" type="submit">Adicionar peça</button>
+              </form>
+            </article>
+          </div>
+
+          <div id="estoque-secoes-container" class="estoque-secoes"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-col footer-col-brand">
+          <a href="index.html" class="logo"><img src="/logo.png" alt="KAUCELL" class="logo-img">KAU<span>CELL</span></a>
+          <p class="footer-tagline">Acessórios e assistência para seu celular.</p>
+        </div>
+        <div class="footer-col footer-col-nav">
+          <h3 class="footer-heading">Navegação</h3>
+          <ul class="footer-list">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="servicos.html">Serviços</a></li>
+            <li><a href="produtos.html">Produtos</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="estoque.html">Controle de estoque</a></li>
+            <li><a href="admin.html">Administração</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-heading">Loja</h3>
+          <ul class="footer-list">
+            <li><a href="produtos.html">Catálogo de produtos</a></li>
+            <li><a href="servicos.html">Assistência e serviços</a></li>
+            <li class="footer-list-note">Rua Dom Pedro II, Nº 39 — Bairro Centro</li>
+            <li class="footer-list-note">Viana, MA</li>
+          </ul>
+        </div>
+        <div class="footer-col footer-col-aside">
+          <h3 class="footer-heading">Contato</h3>
+          <ul class="footer-list">
+            <li><a href="tel:+5598991808746">(98) 99180-8746</a></li>
+            <li><a href="tel:+5598991986345">(98) 99198-6345</a></li>
+            <li><a href="https://www.instagram.com/kaucell1/" target="_blank" rel="noopener noreferrer">Instagram @kaucell1</a></li>
+          </ul>
+          <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="footer-cta" target="_blank" rel="noopener noreferrer">Contato</a>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; 2026 KAUCELL. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="estoque-app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

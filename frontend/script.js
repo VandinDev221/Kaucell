@@ -9,7 +9,7 @@
   var destaquesMount = document.querySelector('.section-destaques .produtos-carrosseis');
   var catalogoMount = document.querySelector('.section-produtos-interna .produtos-carrosseis');
   var MAX_PRODUTOS_CARROSSEL = 10;
-  var isAdmin = document.body.classList.contains('admin-body') || /admin\.html/.test(window.location.pathname);
+  var isAdmin = document.body.classList.contains('admin-body') || /admin\.html|estoque\.html/.test(window.location.pathname);
 
   function closeMenu() {
     if (!header) return;

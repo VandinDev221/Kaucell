@@ -1,5 +1,13 @@
 const { sql, ensureTables, json } = require('../lib/db');
-const { requireAdmin } = require('../lib/auth');
+const { requireAdmin, getAdminFromCookie } = require('../lib/auth');
+const {
+  getNotificacaoConfig,
+  salvarNotificacaoConfig,
+  limparAlertasItem,
+  removerAlertasItem,
+  processarNotificacoesEstoque,
+  enviarTesteNotificacao
+} = require('../lib/estoque-notify');
 
 function sendJson(res, data, status = 200) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -69,6 +77,23 @@ async function listarEstoque() {
   return { secoes: secoesComItens, alertas: { faltando, baixo } };
 }
 
+function notificacoesPublicas(config) {
+  return {
+    telefone: config.telefone_formatado || config.telefone || '',
+    ativo: config.ativo ? 1 : 0,
+    conectado: !!config.conectado,
+    apikey_mascarada: config.apikey_mascarada || '',
+    atualizado_em: config.atualizado_em || null
+  };
+}
+
+async function posAlteracaoItem(item) {
+  if (!item || !item.id) return;
+  await limparAlertasItem(item.id, item.status || 'ok');
+  const dados = await listarEstoque();
+  await processarNotificacoesEstoque(dados.alertas);
+}
+
 module.exports = async function handler(req, res) {
   try {
     if (req.method === 'OPTIONS') {
@@ -87,6 +112,8 @@ module.exports = async function handler(req, res) {
     const id = parseInt(url.searchParams.get('id') || '0', 10);
     const acao = url.searchParams.get('acao') || '';
     const relatorio = url.searchParams.get('relatorio') === '1';
+    const tempoReal = url.searchParams.get('tempo_real') === '1';
+    const isAdmin = getAdminFromCookie(req.headers.cookie);
 
     if (req.method === 'GET') {
       try {
@@ -99,7 +126,21 @@ module.exports = async function handler(req, res) {
             baixo: dados.alertas.baixo
           });
         }
-        return json(res, { ok: true, ...dados });
+
+        let notificacoes = null;
+        if (isAdmin) {
+          if (tempoReal) {
+            await processarNotificacoesEstoque(dados.alertas);
+          }
+          notificacoes = notificacoesPublicas(await getNotificacaoConfig());
+        }
+
+        return json(res, {
+          ok: true,
+          ...dados,
+          atualizado_em: new Date().toISOString(),
+          notificacoes
+        });
       } catch (e) {
         return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
       }
@@ -176,6 +217,7 @@ module.exports = async function handler(req, res) {
             RETURNING id, secao_id, nome, quantidade, quantidade_minima, unidade
           `;
           const item = { ...rows[0], quantidade: Number(rows[0].quantidade), quantidade_minima: Number(rows[0].quantidade_minima), status: classificarItem(rows[0]) };
+          await posAlteracaoItem(item);
           return json(res, { ok: true, item });
         } catch (e) {
           return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
@@ -202,6 +244,7 @@ module.exports = async function handler(req, res) {
           `;
           if (!rows.length) return json(res, { ok: false, message: 'Peça não encontrada.' }, 404);
           const item = { ...rows[0], quantidade: Number(rows[0].quantidade), quantidade_minima: Number(rows[0].quantidade_minima), status: classificarItem(rows[0]) };
+          await posAlteracaoItem(item);
           return json(res, { ok: true, item });
         } catch (e) {
           return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
@@ -228,6 +271,7 @@ module.exports = async function handler(req, res) {
             RETURNING id, secao_id, nome, quantidade, quantidade_minima, unidade
           `;
           const item = { ...rows[0], quantidade: Number(rows[0].quantidade), quantidade_minima: Number(rows[0].quantidade_minima), status: classificarItem(rows[0]) };
+          await posAlteracaoItem(item);
           return json(res, { ok: true, item });
         } catch (e) {
           return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
@@ -239,9 +283,46 @@ module.exports = async function handler(req, res) {
         try {
           const { rows } = await sql`DELETE FROM estoque_itens WHERE id = ${id} RETURNING id`;
           if (!rows.length) return json(res, { ok: false, message: 'Peça não encontrada.' }, 404);
+          await removerAlertasItem(id);
           return json(res, { ok: true });
         } catch (e) {
           return json(res, { ok: false, message: 'Erro no servidor.', error: e.message }, 500);
+        }
+      }
+
+      if (acao === 'notificacoes_salvar') {
+        const telefone = String(body.telefone || '').trim();
+        const apikey = String(body.callmebot_apikey || '').trim();
+        const ativo = body.ativo ? 1 : 0;
+        const manterApikey = body.manter_apikey !== false;
+        if (!telefone) return json(res, { ok: false, message: 'Informe o WhatsApp com DDD.' }, 422);
+        if (!apikey && !manterApikey) {
+          return json(res, { ok: false, message: 'Informe a API Key do CallMeBot.' }, 422);
+        }
+        try {
+          const config = await salvarNotificacaoConfig({
+            telefone,
+            callmebot_apikey: apikey,
+            ativo,
+            manter_apikey: manterApikey && !apikey
+          });
+          if (!config.callmebot_apikey) {
+            return json(res, { ok: false, message: 'Informe a API Key do CallMeBot.' }, 422);
+          }
+          return json(res, { ok: true, notificacoes: notificacoesPublicas(config) });
+        } catch (e) {
+          return json(res, { ok: false, message: e.message || 'Erro ao salvar notificações.' }, 500);
+        }
+      }
+
+      if (acao === 'notificacoes_testar') {
+        const telefone = String(body.telefone || '').trim();
+        const apikey = String(body.callmebot_apikey || '').trim();
+        try {
+          await enviarTesteNotificacao(telefone, apikey, true);
+          return json(res, { ok: true, message: 'Mensagem de teste enviada. Confira seu WhatsApp.' });
+        } catch (e) {
+          return json(res, { ok: false, message: e.message || 'Falha ao enviar teste.' }, 500);
         }
       }
 

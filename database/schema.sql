@@ -41,3 +41,18 @@ CREATE TABLE IF NOT EXISTS estoque_itens (
     criado_em TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS estoque_notificacoes (
+    id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+    telefone VARCHAR(20),
+    callmebot_apikey VARCHAR(120),
+    ativo INTEGER NOT NULL DEFAULT 0,
+    atualizado_em TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS estoque_alertas_enviados (
+    item_id INTEGER NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    enviado_em TIMESTAMP NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (item_id, status)
+);
+

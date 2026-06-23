@@ -155,5 +155,25 @@ function api_bootstrap_tables(PDO $pdo): void
             FOREIGN KEY (secao_id) REFERENCES estoque_secoes(id) ON DELETE CASCADE
         );
     ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS estoque_notificacoes (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            telefone TEXT,
+            callmebot_apikey TEXT,
+            ativo INTEGER NOT NULL DEFAULT 0,
+            atualizado_em TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+    ");
+    $pdo->exec('INSERT OR IGNORE INTO estoque_notificacoes (id) VALUES (1)');
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS estoque_alertas_enviados (
+            item_id INTEGER NOT NULL,
+            status TEXT NOT NULL,
+            enviado_em TEXT NOT NULL DEFAULT (datetime('now')),
+            PRIMARY KEY (item_id, status)
+        );
+    ");
 }
 
