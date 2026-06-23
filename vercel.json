@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "buildCommand": "node scripts/copy-frontend.js",
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/api/produtos.php", "destination": "/api/produtos" },
+    { "source": "/api/servicos.php", "destination": "/api/servicos" },
+    { "source": "/api/blog.php", "destination": "/api/blog" },
+    { "source": "/api/auth.php", "destination": "/api/auth" },
+    { "source": "/api/upload.php", "destination": "/api/upload" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Cookie" }
+      ]
+    }
+  ]
+}

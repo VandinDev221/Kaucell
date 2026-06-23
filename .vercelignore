@@ -1,0 +1,16 @@
+# Dados locais (não enviar para Vercel)
+database/
+uploads/
+*.sqlite
+
+# API PHP: conflita com api/*.js no Vercel (só usamos Node.js no deploy)
+api/auth.php
+api/blog.php
+api/common.php
+api/config.local.example.php
+api/produtos.php
+api/servicos.php
+api/upload.php
+
+node_modules
+.git
