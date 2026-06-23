@@ -24,3 +24,20 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     criado_em TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS estoque_secoes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    ordem INTEGER NOT NULL DEFAULT 0,
+    criado_em TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS estoque_itens (
+    id SERIAL PRIMARY KEY,
+    secao_id INTEGER NOT NULL REFERENCES estoque_secoes(id) ON DELETE CASCADE,
+    nome VARCHAR(255) NOT NULL,
+    quantidade INTEGER NOT NULL DEFAULT 0,
+    quantidade_minima INTEGER NOT NULL DEFAULT 0,
+    unidade VARCHAR(20) NOT NULL DEFAULT 'un',
+    criado_em TIMESTAMP NOT NULL DEFAULT NOW()
+);
+

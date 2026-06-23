@@ -133,5 +133,27 @@ function api_bootstrap_tables(PDO $pdo): void
     try {
         $pdo->exec('ALTER TABLE blog_posts ADD COLUMN imagem_url TEXT');
     } catch (Throwable $e) {}
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS estoque_secoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            ordem INTEGER NOT NULL DEFAULT 0,
+            criado_em TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS estoque_itens (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            secao_id INTEGER NOT NULL,
+            nome TEXT NOT NULL,
+            quantidade INTEGER NOT NULL DEFAULT 0,
+            quantidade_minima INTEGER NOT NULL DEFAULT 0,
+            unidade TEXT NOT NULL DEFAULT 'un',
+            criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+            FOREIGN KEY (secao_id) REFERENCES estoque_secoes(id) ON DELETE CASCADE
+        );
+    ");
 }
 

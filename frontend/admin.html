@@ -37,7 +37,7 @@
         <header class="section-header">
           <span class="section-label">Painel</span>
           <h1 class="section-title">Admin da loja KAUCELL</h1>
-          <p class="section-desc">Cadastre produtos, serviços e posts do blog em um só lugar.</p>
+          <p class="section-desc">Cadastre produtos, serviços, blog e controle de estoque de peças.</p>
         </header>
         <p id="admin-status" class="admin-auth-error" hidden></p>
 
@@ -56,6 +56,14 @@
         </section>
 
         <div id="admin-area" hidden>
+        <nav class="admin-tabs" role="tablist" aria-label="Seções do painel">
+          <button type="button" class="admin-tab admin-tab--active" data-tab="produtos" role="tab" aria-selected="true">Produtos</button>
+          <button type="button" class="admin-tab" data-tab="servicos" role="tab" aria-selected="false">Serviços</button>
+          <button type="button" class="admin-tab" data-tab="blog" role="tab" aria-selected="false">Blog</button>
+          <button type="button" class="admin-tab" data-tab="estoque" role="tab" aria-selected="false">Estoque</button>
+        </nav>
+
+        <div id="tab-produtos" class="admin-tab-panel" role="tabpanel">
         <div class="admin-grid">
           <article class="admin-card">
             <h2 class="admin-card-title">Cadastrar produto</h2>
@@ -84,6 +92,32 @@
             </form>
           </article>
 
+        </div>
+
+        <div class="admin-preview-grid">
+          <article class="admin-card admin-card-full">
+            <h3 class="admin-card-title">Produtos cadastrados</h3>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Imagem</th>
+                    <th>Destaque</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="lista-produtos"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+        </div>
+
+        <div id="tab-servicos" class="admin-tab-panel" role="tabpanel" hidden>
+        <div class="admin-grid">
           <article class="admin-card">
             <h2 class="admin-card-title">Cadastrar serviço</h2>
             <form id="form-servico" class="admin-form">
@@ -109,7 +143,30 @@
               <button class="btn btn-secondary" type="submit">Cadastrar serviços em lote</button>
             </form>
           </article>
+        </div>
 
+        <div class="admin-preview-grid">
+          <article class="admin-card admin-card-full">
+            <h3 class="admin-card-title">Serviços cadastrados</h3>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Modelo</th>
+                    <th>Serviço</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="lista-servicos"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+        </div>
+
+        <div id="tab-blog" class="admin-tab-panel" role="tabpanel" hidden>
+        <div class="admin-grid">
           <article class="admin-card admin-card-full">
             <h2 class="admin-card-title">Cadastrar post do blog</h2>
             <form id="form-blog" class="admin-form">
@@ -137,42 +194,6 @@
         </div>
 
         <div class="admin-preview-grid">
-          <article class="admin-card">
-            <h3 class="admin-card-title">Produtos cadastrados</h3>
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Imagem</th>
-                    <th>Destaque</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="lista-produtos"></tbody>
-              </table>
-            </div>
-          </article>
-
-          <article class="admin-card">
-            <h3 class="admin-card-title">Serviços cadastrados</h3>
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Modelo</th>
-                    <th>Serviço</th>
-                    <th>Valor</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="lista-servicos"></tbody>
-              </table>
-            </div>
-          </article>
-
           <article class="admin-card admin-card-full">
             <h3 class="admin-card-title">Posts cadastrados</h3>
             <div class="admin-table-wrap">
@@ -190,6 +211,64 @@
               </table>
             </div>
           </article>
+        </div>
+        </div>
+
+        <div id="tab-estoque" class="admin-tab-panel" role="tabpanel" hidden>
+          <div id="estoque-alertas" class="estoque-alertas">
+            <div class="estoque-alerta estoque-alerta--critico">
+              <span class="estoque-alerta-num" id="estoque-count-faltando">0</span>
+              <span class="estoque-alerta-label">Peças em falta</span>
+            </div>
+            <div class="estoque-alerta estoque-alerta--aviso">
+              <span class="estoque-alerta-num" id="estoque-count-baixo">0</span>
+              <span class="estoque-alerta-label">Estoque baixo</span>
+            </div>
+            <div class="estoque-alerta-actions">
+              <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-relatorio">Baixar relatório CSV</button>
+              <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-imprimir">Imprimir alertas</button>
+            </div>
+          </div>
+
+          <div id="estoque-lista-alertas" class="estoque-lista-alertas" hidden></div>
+
+          <div class="admin-grid">
+            <article class="admin-card">
+              <h2 class="admin-card-title">Nova seção do estoque</h2>
+              <p class="section-desc">Organize por categorias: Telas, Bateria, Dock de carga, Botões, etc.</p>
+              <form id="form-estoque-secao" class="admin-form">
+                <label for="estoque-secao-nome">Nome da seção</label>
+                <input id="estoque-secao-nome" type="text" required placeholder="Ex: Telas">
+                <button class="btn btn-primary" type="submit">Criar seção</button>
+              </form>
+            </article>
+
+            <article class="admin-card">
+              <h2 class="admin-card-title">Cadastrar peça</h2>
+              <form id="form-estoque-item" class="admin-form">
+                <label for="estoque-item-secao">Seção</label>
+                <select id="estoque-item-secao" required>
+                  <option value="">Selecione uma seção</option>
+                </select>
+
+                <label for="estoque-item-nome">Nome da peça</label>
+                <input id="estoque-item-nome" type="text" required placeholder="Ex: Tela iPhone 11">
+
+                <label for="estoque-item-qtd">Quantidade atual</label>
+                <input id="estoque-item-qtd" type="number" min="0" value="0" required>
+
+                <label for="estoque-item-min">Quantidade mínima (alerta)</label>
+                <input id="estoque-item-min" type="number" min="0" value="2" required>
+
+                <label for="estoque-item-unidade">Unidade</label>
+                <input id="estoque-item-unidade" type="text" value="un" placeholder="un, pç, kit">
+
+                <button class="btn btn-primary" type="submit">Adicionar peça</button>
+              </form>
+            </article>
+          </div>
+
+          <div id="estoque-secoes-container" class="estoque-secoes"></div>
         </div>
         </div>
       </div>

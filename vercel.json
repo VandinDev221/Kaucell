@@ -7,7 +7,8 @@
     { "source": "/api/servicos.php", "destination": "/api/servicos" },
     { "source": "/api/blog.php", "destination": "/api/blog" },
     { "source": "/api/auth.php", "destination": "/api/auth" },
-    { "source": "/api/upload.php", "destination": "/api/upload" }
+    { "source": "/api/upload.php", "destination": "/api/upload" },
+    { "source": "/api/estoque.php", "destination": "/api/estoque" }
   ],
   "headers": [
     {
