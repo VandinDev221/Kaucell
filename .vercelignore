@@ -10,6 +10,7 @@ api/common.php
 api/config.local.example.php
 api/produtos.php
 api/servicos.php
+api/estoque.php
 api/upload.php
 
 node_modules
