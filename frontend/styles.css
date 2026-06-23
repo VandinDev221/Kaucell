@@ -981,6 +981,31 @@ body.nav-open .nav-overlay {
   margin-bottom: 1rem;
 }
 
+.card-produto-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.card-produto-acoes .btn-small { width: 100%; }
+
+.btn-whatsapp-produto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.btn-whatsapp-produto svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
 .card-produto .btn-small { margin-top: auto; width: 100%; }
 
 .card-produto h3:not(.card-produto-body h3) {
@@ -1549,12 +1574,430 @@ body.nav-open .nav-overlay {
   font-size: 0.95rem;
 }
 
+/* ===== ESTOQUE V2 — painel loja celular ===== */
+.estoque-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.estoque-live-bar--compact {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.estoque-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.estoque-kpi {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.estoque-kpi-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.estoque-kpi-label {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.estoque-kpi--critico { border-color: #fecaca; background: #fef2f2; }
+.estoque-kpi--critico .estoque-kpi-value { color: #b91c1c; }
+.estoque-kpi--aviso { border-color: #fde68a; background: #fffbeb; }
+.estoque-kpi--aviso .estoque-kpi-value { color: #b45309; }
+.estoque-kpi--ok { border-color: #a7f3d0; background: #ecfdf5; }
+.estoque-kpi--ok .estoque-kpi-value { color: #047857; }
+
+.estoque-toolbar {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 20;
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.estoque-search-wrap {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.estoque-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.estoque-search-input {
+  width: 100%;
+  padding: 0.85rem 2.5rem 0.85rem 2.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font);
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.estoque-search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.estoque-search-clear {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-muted);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.estoque-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.estoque-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex: 1 1 auto;
+}
+
+.estoque-filtro {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.estoque-filtro:hover { border-color: var(--primary); color: var(--primary); }
+.estoque-filtro--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.estoque-select-secao {
+  min-width: 10rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  background: #fff;
+}
+
+.estoque-view-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.estoque-view-btn {
+  padding: 0.45rem 0.75rem;
+  border: none;
+  background: #fff;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.estoque-view-btn--active {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.estoque-resultados {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.estoque-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.estoque-master-wrap {
+  margin-bottom: 1.5rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.estoque-master-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-muted);
+  z-index: 1;
+}
+
+.estoque-row--critico td { background: #fef2f2; }
+.estoque-row--aviso td { background: #fffbeb; }
+.estoque-row--critico:hover td,
+.estoque-row--aviso:hover td { filter: brightness(0.98); }
+
+.estoque-col-secao {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.estoque-col-peca strong { font-weight: 600; }
+.estoque-col-qtd { white-space: nowrap; }
+.estoque-unidade { font-size: 0.78rem; color: var(--text-muted); }
+
+.estoque-mark {
+  background: #fef08a;
+  color: inherit;
+  padding: 0 0.15rem;
+  border-radius: 2px;
+}
+
+.estoque-secao-title-wrap { display: flex; flex-direction: column; gap: 0.15rem; }
+.estoque-secao-count { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+
+.estoque-alertas-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.estoque-alerta-bloco {
+  font-size: 0.88rem;
+}
+
+.estoque-alerta-bloco ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.estoque-alerta-bloco li { margin-bottom: 0.25rem; }
+.estoque-alerta-bloco--critico { color: #b91c1c; }
+
+.estoque-panel {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.estoque-panel summary {
+  padding: 0.85rem 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.estoque-panel summary::-webkit-details-marker { display: none; }
+
+.estoque-panel summary::after {
+  content: '+';
+  float: right;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.estoque-panel[open] summary::after { content: '−'; }
+
+.estoque-panel-body { padding: 0 1.15rem 1.15rem; }
+
+.estoque-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-muted);
+  border-radius: var(--radius-sm);
+}
+
+.estoque-presets-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 0.25rem;
+}
+
+.estoque-preset-btn {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.estoque-preset-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.estoque-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.notificacao-card--flat {
+  border: none;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.estoque-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.estoque-modal[hidden] { display: none !important; }
+
+.estoque-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.estoque-modal-dialog {
+  position: relative;
+  width: min(100%, 420px);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg, 0 20px 40px rgba(0,0,0,0.15));
+  padding: 1.25rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.estoque-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.estoque-modal-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.estoque-modal-close {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.footer--compact {
+  padding: 1.5rem 0;
+  margin-top: 1rem;
+}
+
+.footer--compact .footer-copy {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.footer--compact .footer-copy a { color: var(--primary-light); }
+
+@media (max-width: 900px) {
+  .estoque-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .estoque-kpi:last-child { grid-column: span 2; }
+  .estoque-toolbar { top: 3.5rem; }
+}
+
+@media (max-width: 640px) {
+  .estoque-kpi-grid { grid-template-columns: 1fr 1fr; }
+  .estoque-kpi:last-child { grid-column: span 1; }
+  .estoque-form-row { grid-template-columns: 1fr; }
+  .estoque-view-toggle { width: 100%; }
+  .estoque-view-btn { flex: 1; }
+  .estoque-master-table .admin-actions .btn { padding: 0.3rem 0.45rem; font-size: 0.72rem; }
+}
+
 @media print {
-  .header, .footer, .admin-tabs, .admin-grid, .estoque-alerta-actions, .admin-action-btn, .estoque-qtd-actions, .estoque-secao-actions, .admin-logout-top, .notificacao-card { display: none !important; }
-  .estoque-alertas, .estoque-lista-alertas, .estoque-secoes { display: block !important; }
+  .header, .footer, .estoque-toolbar, .estoque-toolbar-actions, .estoque-panel, .estoque-modal, .admin-action-btn, .estoque-qtd-actions, .estoque-secao-actions, .admin-logout-top, .estoque-kpi-grid { display: none !important; }
+  .estoque-lista-alertas, .estoque-secoes, .estoque-master-wrap { display: block !important; }
   #estoque-login-area { display: none !important; }
   #estoque-area { display: block !important; }
-  .admin-tab-panel[hidden] { display: none !important; }
+  .estoque-master-table thead th { position: static; }
 }
 
 /* ===== FOOTER ===== */
