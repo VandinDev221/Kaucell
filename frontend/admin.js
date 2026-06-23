@@ -355,8 +355,6 @@
         alert('Erro ao excluir seção.');
       });
   }
-    return 'R$ ' + Number(valor).toFixed(2).replace('.', ',');
-  }
 
   function formatarData(dataIso) {
     if (!dataIso) return '';
