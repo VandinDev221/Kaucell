@@ -2,48 +2,233 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAUCELL — Produtos em destaque</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="KAUCELL — Acessórios e assistência técnica para celular em Viana, MA. Troca de tela, bateria e muito mais.">
+  <meta name="theme-color" content="#0ea5e9">
+  <title>KAUCELL — Acessórios e Assistência para Celular</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page="home">
   <header class="header">
     <div class="container header-inner">
-      <a href="index.html" class="logo"><img src="/logo.png" alt="KAUCELL" class="logo-img">KAU<span>CELL</span></a>
-      <nav class="nav">
+      <a href="index.html" class="logo"><img src="/logo.png" alt="" class="logo-img" width="42" height="42">KAU<span>CELL</span></a>
+      <nav class="nav" aria-label="Menu principal">
         <a href="index.html" class="nav-link nav-link--active">Início</a>
         <a href="servicos.html" class="nav-link">Serviços</a>
         <a href="produtos.html" class="nav-link">Produtos</a>
         <a href="blog.html" class="nav-link">Blog</a>
       </nav>
-      <button class="menu-toggle" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="header-cta" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
     </div>
   </header>
+  <div class="nav-overlay" aria-hidden="true"></div>
 
   <main class="main main--home">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-content reveal">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Assistência em Viana, MA
+          </div>
+          <h1 class="hero-title">Seu celular no <em>melhor cuidado</em></h1>
+          <p class="hero-desc">Acessórios de qualidade, consertos com garantia e atendimento humanizado. Tudo para manter seu aparelho funcionando como novo.</p>
+          <div class="hero-actions">
+            <a href="servicos.html" class="btn btn-primary">Consultar preços</a>
+            <a href="produtos.html" class="btn btn-secondary">Ver produtos</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <strong>+500</strong>
+              <span>Reparos realizados</span>
+            </div>
+            <div class="hero-stat">
+              <strong>100%</strong>
+              <span>Atendimento local</span>
+            </div>
+            <div class="hero-stat">
+              <strong>Garantia</strong>
+              <span>Em todos os serviços</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual reveal reveal-delay-1">
+          <div class="hero-phone">
+            <div class="hero-phone-header">
+              <div class="hero-phone-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+              </div>
+              <div>
+                <h2>Assistência completa</h2>
+                <p>Peças de qualidade · Preço justo</p>
+              </div>
+            </div>
+            <ul class="hero-phone-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Troca de tela e bateria
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Capinhas, películas e acessórios
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Orçamento rápido via WhatsApp
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Todas as marcas e modelos
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-acesso">
+      <div class="container">
+        <header class="section-header reveal">
+          <span class="section-label">Como podemos ajudar</span>
+          <h2 class="section-title">Tudo em um só lugar</h2>
+          <p class="section-desc">Escolha o que você precisa e fale com a gente em poucos cliques.</p>
+        </header>
+        <div class="features-grid">
+          <a href="servicos.html" class="feature-card reveal">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3>Serviços e preços</h3>
+            <p>Consulte valores de troca de tela, bateria e outros reparos pelo modelo do seu aparelho.</p>
+            <span class="feature-link">Consultar agora <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </a>
+          <a href="produtos.html" class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <h3>Acessórios</h3>
+            <p>Capinhas, películas, carregadores e muito mais para proteger e personalizar seu celular.</p>
+            <span class="feature-link">Ver catálogo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </a>
+          <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="feature-card reveal reveal-delay-2" target="_blank" rel="noopener noreferrer">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <h3>Fale conosco</h3>
+            <p>Tire dúvidas, agende seu atendimento ou peça um orçamento pelo WhatsApp.</p>
+            <span class="feature-link">Enviar mensagem <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <header class="section-header reveal">
+          <span class="section-label">Nossos serviços</span>
+          <h2 class="section-title">O que fazemos</h2>
+        </header>
+        <div class="services-preview reveal">
+          <div class="service-pill">
+            <div class="service-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <span>Troca de tela</span>
+          </div>
+          <div class="service-pill">
+            <div class="service-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg></div>
+            <span>Troca de bateria</span>
+          </div>
+          <div class="service-pill">
+            <div class="service-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <span>Películas</span>
+          </div>
+          <div class="service-pill">
+            <div class="service-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg></div>
+            <span>Capinhas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section section-destaques">
       <div class="container">
-        <header class="section-header">
-          <h1 class="section-title">Produtos em destaque</h1>
-          <p class="section-desc">Catálogo em atualização. Em breve novos produtos em destaque.</p>
+        <header class="section-header reveal">
+          <span class="section-label">Destaques</span>
+          <h2 class="section-title">Produtos em destaque</h2>
+          <p class="section-desc">Confira nossa seleção de acessórios e ofertas especiais.</p>
         </header>
         <div class="produtos-carrosseis">
           <div class="produtos-grid produtos-grid--carousel-mobile">
-            <article class="card-produto">
+            <article class="card-produto reveal">
               <div class="card-produto-img">KAUCELL</div>
-              <h3>Nenhum produto em destaque no momento</h3>
-              <p class="card-produto-preco">Em breve</p>
-              <a href="produtos.html" class="btn btn-small">Acompanhar catálogo</a>
+              <div class="card-produto-body">
+                <h3>Nenhum produto em destaque no momento</h3>
+                <p class="card-produto-preco">Em breve</p>
+                <a href="produtos.html" class="btn btn-primary btn-small">Ver catálogo</a>
+              </div>
             </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-banner reveal">
+          <div class="cta-banner-inner">
+            <h2>Precisa de ajuda com seu celular?</h2>
+            <p>Fale com a gente agora e receba um orçamento sem compromisso.</p>
+            <div class="cta-banner-actions">
+              <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Chamar no WhatsApp
+              </a>
+              <a href="servicos.html" class="btn btn-ghost-light">Ver tabela de preços</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <header class="section-header reveal">
+          <span class="section-label">Onde estamos</span>
+          <h2 class="section-title">Visite nossa loja</h2>
+        </header>
+        <div class="location-grid reveal">
+          <div class="location-card">
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              KAUCELL — Viana, MA
+            </h3>
+            <ul class="location-info">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Rua Dom Pedro II, Nº 39 — Centro, Viana, MA
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                <span><a href="tel:+5598991808746">(98) 99180-8746</a> · <a href="tel:+5598991986345">(98) 99198-6345</a></span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                <a href="https://www.instagram.com/kaucell1/" target="_blank" rel="noopener noreferrer">@kaucell1 no Instagram</a>
+              </li>
+            </ul>
+          </div>
+          <div class="location-map">
+            <iframe src="https://maps.google.com/maps?q=Rua+Dom+Pedro+II+39+Viana+MA&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localização da KAUCELL no mapa"></iframe>
           </div>
         </div>
       </div>
@@ -54,8 +239,12 @@
     <div class="container">
       <div class="footer-main">
         <div class="footer-col footer-col-brand">
-          <a href="index.html" class="logo"><img src="/logo.png" alt="KAUCELL" class="logo-img">KAU<span>CELL</span></a>
-          <p class="footer-tagline">Acessórios e assistência para seu celular.</p>
+          <a href="index.html" class="logo"><img src="/logo.png" alt="" class="logo-img" width="42" height="42">KAU<span>CELL</span></a>
+          <p class="footer-tagline">Acessórios e assistência técnica para seu celular em Viana, MA.</p>
+          <div class="footer-social">
+            <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="footer-social-link footer-social-link--whatsapp" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+            <a href="https://www.instagram.com/kaucell1/" class="footer-social-link footer-social-link--instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          </div>
         </div>
         <div class="footer-col footer-col-nav">
           <h3 class="footer-heading">Navegação</h3>
@@ -71,33 +260,43 @@
           <ul class="footer-list">
             <li><a href="produtos.html">Catálogo de produtos</a></li>
             <li><a href="servicos.html">Assistência e serviços</a></li>
-            <li class="footer-list-note">Rua Dom Pedro II, Nº 39 — Bairro Centro</li>
+            <li class="footer-list-note">Rua Dom Pedro II, Nº 39 — Centro</li>
             <li class="footer-list-note">Viana, MA</li>
           </ul>
         </div>
-        <div class="footer-col footer-col-aside">
+        <div class="footer-col">
           <h3 class="footer-heading">Contato</h3>
           <ul class="footer-list">
             <li><a href="tel:+5598991808746">(98) 99180-8746</a></li>
             <li><a href="tel:+5598991986345">(98) 99198-6345</a></li>
             <li><a href="https://www.instagram.com/kaucell1/" target="_blank" rel="noopener noreferrer">Instagram @kaucell1</a></li>
           </ul>
-          <div class="footer-social">
-            <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="footer-social-link footer-social-link--whatsapp" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="Abrir conversa no WhatsApp">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/kaucell1/" class="footer-social-link footer-social-link--instagram" target="_blank" rel="noopener noreferrer" title="Instagram @kaucell1" aria-label="Abrir perfil no Instagram">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-          </div>
-          <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="footer-cta" target="_blank" rel="noopener noreferrer">Contato</a>
+          <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="footer-cta" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
         </div>
       </div>
       <p class="footer-copy">&copy; 2026 KAUCELL. Todos os direitos reservados.</p>
     </div>
   </footer>
 
+  <nav class="bottom-nav" aria-label="Navegação rápida">
+    <a href="index.html" class="active" data-nav="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Início
+    </a>
+    <a href="servicos.html" data-nav="servicos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Serviços
+    </a>
+    <a href="produtos.html" data-nav="produtos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+      Produtos
+    </a>
+    <a href="https://wa.me/5598991986345?text=Ol%C3%A1!%20Vim%20atrav%C3%A9s%20do%20site%20da%20KAUCELL%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener noreferrer" data-nav="whatsapp">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+  </nav>
+
   <script src="script.js"></script>
 </body>
 </html>
-
