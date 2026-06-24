@@ -1385,6 +1385,20 @@ body.nav-open .nav-overlay {
   font-weight: 600;
 }
 
+.notificacao-status--erro {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.notificacao-passos code {
+  display: inline-block;
+  margin: 0.25rem 0;
+  padding: 0.2rem 0.45rem;
+  background: var(--bg-muted);
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
 .admin-tab-panel { animation: fadeIn 0.25s ease; }
 
 .admin-link-card { margin-bottom: 1.5rem; }

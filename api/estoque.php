@@ -142,6 +142,19 @@ function estoque_notificacoes_publicas(array $config): array
     ];
 }
 
+function estoque_parse_callmebot_erro(string $body): string
+{
+    $text = trim(preg_replace('/\s+/', ' ', strip_tags($body)));
+    if (preg_match('/apikey is invalid/i', $text)) {
+        return 'API Key inválida. No WhatsApp do número cadastrado, envie "I allow callmebot to send me messages" '
+            . 'para o contato CallMeBot (+34 694 23 67 31), copie a nova chave e cole aqui.';
+    }
+    if (preg_match('/phone.*invalid|invalid phone/i', $text)) {
+        return 'Número de WhatsApp inválido. Use DDD + número (ex: 98991808746).';
+    }
+    return $text !== '' ? $text : 'Não foi possível enviar a mensagem pelo WhatsApp.';
+}
+
 function estoque_enviar_whatsapp(string $telefone, string $texto, string $apikey): void
 {
     $phone = estoque_normalizar_telefone($telefone);
@@ -156,7 +169,7 @@ function estoque_enviar_whatsapp(string $telefone, string $texto, string $apikey
     $ctx = stream_context_create(['http' => ['timeout' => 15]]);
     $body = @file_get_contents($url, false, $ctx);
     if ($body === false || preg_match('/error|invalid|fail/i', $body)) {
-        throw new RuntimeException(trim((string)$body) ?: 'Não foi possível enviar a mensagem pelo WhatsApp.');
+        throw new RuntimeException(estoque_parse_callmebot_erro((string)$body));
     }
 }
 

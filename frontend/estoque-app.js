@@ -747,7 +747,18 @@
           callmebot_apikey: document.getElementById('notif-apikey').value.trim()
         })
       }).then(function (res) {
-        if (!res.ok) { alert(res.message || 'Falha no teste.'); return; }
+        if (!res.ok) {
+          if (notificacaoStatus) {
+            notificacaoStatus.textContent = res.message || 'Falha no teste.';
+            notificacaoStatus.className = 'notificacao-status notificacao-status--erro';
+          }
+          alert(res.message || 'Falha no teste.');
+          return;
+        }
+        if (notificacaoStatus) {
+          notificacaoStatus.textContent = res.message || 'Teste enviado. Confira o WhatsApp.';
+          notificacaoStatus.className = 'notificacao-status notificacao-status--ok';
+        }
         alert(res.message || 'Teste enviado. Confira o WhatsApp.');
       }).catch(function () { alert('Erro no teste.'); });
     });
