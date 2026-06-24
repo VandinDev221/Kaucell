@@ -154,6 +154,10 @@ a { color: inherit; }
   background: #fef2f2;
 }
 
+.nav-link[hidden] {
+  display: none !important;
+}
+
 .header-cta {
   display: none;
   align-items: center;
@@ -212,9 +216,8 @@ a { color: inherit; }
   display: none;
   position: fixed;
   inset: 0;
-  top: var(--header-h);
   background: rgba(15, 23, 42, 0.5);
-  z-index: 150;
+  z-index: 240;
   opacity: 0;
   transition: opacity var(--transition);
 }
@@ -2566,35 +2569,71 @@ body.nav-open .nav-overlay {
   .menu-toggle { display: flex; }
   .header-cta { display: none; }
 
+  .header.nav-open {
+    z-index: 280;
+  }
+
   .header.nav-open .nav {
     display: flex;
     position: fixed;
-    top: var(--header-h);
-    left: 0; right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    width: min(288px, 86vw);
     flex-direction: column;
-    gap: 0.25rem;
+    align-items: stretch;
+    gap: 0.15rem;
     background: var(--bg-elevated);
-    border-bottom: 1px solid var(--border);
-    padding: 0.75rem 1rem 1rem;
-    box-shadow: var(--shadow-md);
-    z-index: 160;
-    animation: slideDown 0.25s var(--ease);
+    border-right: 1px solid var(--border);
+    padding: calc(var(--header-h) + 0.5rem) 0 1.5rem;
+    box-shadow: 4px 0 28px rgba(15, 23, 42, 0.18);
+    z-index: 260;
+    overflow-y: auto;
+    animation: slideNavLeft 0.28s var(--ease);
   }
 
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-12px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes slideNavLeft {
+    from { opacity: 0; transform: translateX(-100%); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   .header.nav-open .nav-link {
-    padding: 0.85rem 1rem;
+    padding: 0.9rem 1.25rem;
     font-size: 1rem;
+    border-radius: 0;
+    color: var(--text-secondary);
+  }
+
+  .header.nav-open .nav-link:hover {
+    color: var(--primary);
+    background: var(--primary-soft);
+  }
+
+  .header.nav-open .nav-link--active {
+    color: var(--primary);
+    background: var(--primary-soft);
   }
 
   .header.nav-open .nav-link--logout {
-    margin-top: 0.35rem;
+    margin-top: auto;
     border-top: 1px solid var(--border);
     padding-top: 1rem;
+    color: #b91c1c;
+  }
+
+  .estoque-body--ativo .header.nav-open .nav-link {
+    color: var(--text-secondary);
+  }
+
+  .estoque-body--ativo .header.nav-open .nav-link--active,
+  .estoque-body--ativo .header.nav-open .nav-link:hover {
+    color: var(--primary);
+    background: var(--primary-soft);
+  }
+
+  .estoque-body--ativo .header.nav-open .nav-link--logout {
+    color: #b91c1c;
   }
 
   .btn-block-mobile { width: 100%; }

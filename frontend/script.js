@@ -18,6 +18,7 @@
     header.classList.remove('nav-open');
     document.body.classList.remove('nav-open');
     if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+    if (navOverlay) navOverlay.setAttribute('aria-hidden', 'true');
   }
 
   function openMenu() {
@@ -25,6 +26,7 @@
     header.classList.add('nav-open');
     document.body.classList.add('nav-open');
     if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+    if (navOverlay) navOverlay.setAttribute('aria-hidden', 'false');
   }
 
   if (header) {
