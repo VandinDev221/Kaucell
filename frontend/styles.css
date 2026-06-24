@@ -2728,6 +2728,16 @@ body.nav-open .nav-overlay {
   align-items: center;
 }
 
+#estoque-login-area[hidden],
+.estoque-login[hidden] {
+  display: none !important;
+}
+
+#estoque-area[hidden],
+.estoque-app[hidden] {
+  display: none !important;
+}
+
 .estoque-login-card {
   max-width: 400px;
   margin: 0 auto;

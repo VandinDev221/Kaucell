@@ -370,7 +370,7 @@
       var vazio = todos.length > 0 && filtrados.length === 0;
       estoqueBuscaVazia.hidden = !vazio;
     }
-    if (estoqueTabelaWrap) estoqueTabelaWrap.hidden = filtrados.length === 0 && todos.length > 0;
+    if (estoqueTabelaWrap) estoqueTabelaWrap.hidden = filtrados.length === 0;
   }
 
   function renderSecoesView() {
@@ -622,12 +622,14 @@
     document.body.classList.remove('estoque-body--ativo');
     if (loginArea) loginArea.hidden = false;
     if (estoqueArea) estoqueArea.hidden = true;
+    if (logoutTop) logoutTop.hidden = true;
   }
 
   function mostrarEstoque() {
     document.body.classList.add('estoque-body--ativo');
     if (loginArea) loginArea.hidden = true;
     if (estoqueArea) estoqueArea.hidden = false;
+    if (logoutTop) logoutTop.hidden = false;
     trocarTab('pecas');
     carregarEstoque({ forcar: true, tempoReal: true });
     iniciarEstoqueTempoReal();
@@ -882,6 +884,5 @@
     });
   }
 
-  if (logoutTop) logoutTop.hidden = false;
   verificarAuthInicial();
 })();
