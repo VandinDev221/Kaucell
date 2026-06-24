@@ -154,11 +154,11 @@
 
   function acoesHtml() {
     return (
-      '<td class="estoque-qtd-actions">' +
+      '<td class="estoque-qtd-actions" data-label="Ajuste">' +
       '<button type="button" class="estoque-qtd-btn estoque-action" data-action="menos" title="Saída −1">−</button>' +
       '<button type="button" class="estoque-qtd-btn estoque-action" data-action="mais" title="Entrada +1">+</button>' +
       '</td>' +
-      '<td class="admin-actions">' +
+      '<td class="admin-actions estoque-col-acoes" data-label="Ações">' +
       '<button type="button" class="btn btn-small btn-secondary admin-action-btn estoque-action" data-action="editar">Editar</button> ' +
       '<button type="button" class="btn btn-small btn-primary admin-action-btn estoque-action" data-action="excluir">Excluir</button>' +
       '</td>'
@@ -169,11 +169,11 @@
     var q = termoBusca;
     return (
       '<tr class="' + rowClass(item.status) + '" data-id="' + item.id + '" data-secao-id="' + item.secao_id + '" data-nome="' + escapeHtml(item.nome) + '" data-qtd="' + item.quantidade + '" data-min="' + item.quantidade_minima + '" data-unidade="' + escapeHtml(item.unidade) + '" data-status="' + item.status + '">' +
-      (showSecao !== false ? '<td class="estoque-col-secao">' + highlightText(item.secao_nome, q) + '</td>' : '') +
-      '<td class="estoque-col-peca"><strong>' + highlightText(item.nome, q) + '</strong></td>' +
-      '<td class="estoque-col-qtd"><span class="estoque-qtd-valor">' + item.quantidade + '</span> <span class="estoque-unidade">' + escapeHtml(item.unidade) + '</span></td>' +
-      '<td>' + item.quantidade_minima + '</td>' +
-      '<td>' + badgeStatus(item.status) + '</td>' +
+      (showSecao !== false ? '<td class="estoque-col-secao" data-label="Seção">' + highlightText(item.secao_nome, q) + '</td>' : '') +
+      '<td class="estoque-col-peca" data-label="Peça"><strong>' + highlightText(item.nome, q) + '</strong></td>' +
+      '<td class="estoque-col-qtd" data-label="Qtd"><span class="estoque-qtd-valor">' + item.quantidade + '</span> <span class="estoque-unidade">' + escapeHtml(item.unidade) + '</span></td>' +
+      '<td data-label="Mín.">' + item.quantidade_minima + '</td>' +
+      '<td data-label="Status">' + badgeStatus(item.status) + '</td>' +
       acoesHtml() +
       '</tr>'
     );
@@ -315,7 +315,7 @@
         '<button type="button" class="btn btn-small btn-secondary estoque-secao-action" data-action="editar-secao">Renomear</button> ' +
         '<button type="button" class="btn btn-small btn-primary estoque-secao-action" data-action="excluir-secao">Excluir</button>' +
         '</div></div>' +
-        '<div class="admin-table-wrap"><table class="admin-table estoque-secao-table">' +
+        '<div class="admin-table-wrap estoque-table-scroll"><table class="admin-table estoque-secao-table estoque-table--cards-mobile">' +
         '<thead><tr><th>Peça</th><th>Qtd</th><th>Mín.</th><th>Status</th><th>Ajuste</th><th>Ações</th></tr></thead>' +
         '<tbody>' + rows + '</tbody></table></div>';
       estoqueSecoesContainer.appendChild(article);

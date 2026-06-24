@@ -2,53 +2,59 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0ea5e9">
+  <meta name="description" content="Controle de estoque de peças — KAUCELL assistência técnica, Viana MA.">
   <title>Controle de Estoque | KAUCELL</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="admin-body estoque-body">
+<body class="admin-body estoque-body" data-page="estoque">
   <header class="header">
     <div class="container header-inner">
-      <a href="index.html" class="logo"><img src="/logo.png" alt="KAUCELL" class="logo-img">KAU<span>CELL</span></a>
-      <nav class="nav">
+      <a href="index.html" class="logo"><img src="/logo.png" alt="" class="logo-img" width="40" height="40">KAU<span>CELL</span></a>
+      <nav class="nav" aria-label="Menu principal">
         <a href="index.html" class="nav-link">Início</a>
         <a href="servicos.html" class="nav-link">Serviços</a>
         <a href="produtos.html" class="nav-link">Produtos</a>
         <a href="blog.html" class="nav-link">Blog</a>
         <a href="estoque.html" class="nav-link nav-link--active">Estoque</a>
         <a href="admin.html" class="nav-link">Admin</a>
+        <a href="#" class="nav-link nav-link--logout" id="estoque-logout">Sair</a>
       </nav>
-      <a href="admin.html" class="btn btn-secondary admin-estoque-top">Admin</a>
-      <a href="#" class="btn btn-secondary admin-logout-top" id="estoque-logout">Sair</a>
-      <button class="menu-toggle" aria-label="Abrir menu">
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
+  <div class="nav-overlay" aria-hidden="true"></div>
 
-  <main class="main main--page">
-    <section class="section admin-section estoque-page">
+  <main class="main main--page main--estoque">
+    <div class="page-hero page-hero--admin">
       <div class="container">
         <header class="section-header estoque-page-header">
-          <div>
+          <div class="estoque-page-header-text">
             <span class="section-label">Assistência técnica</span>
             <h1 class="section-title">Estoque de peças <span id="estoque-header-badge" class="admin-tab-badge" hidden>0</span></h1>
-            <p class="section-desc">Controle telas, baterias, conectores e componentes com busca global e alertas em tempo real.</p>
+            <p class="section-desc">Telas, baterias, conectores e componentes — busca global e alertas em tempo real.</p>
           </div>
           <div class="estoque-live-bar estoque-live-bar--compact">
             <span class="estoque-live-dot" aria-hidden="true"></span>
             <span id="estoque-live-text">Tempo real ativo</span>
           </div>
         </header>
+      </div>
+    </div>
 
+    <section class="section admin-section estoque-page">
+      <div class="container">
         <p id="estoque-status" class="admin-auth-error" hidden></p>
 
-        <section id="estoque-login-area" class="admin-login-area">
+        <section id="estoque-login-area" class="admin-login-area admin-login-area--card">
           <h2 class="admin-card-title">Acesso ao estoque</h2>
           <p class="section-desc">Use o mesmo usuário e senha do painel admin.</p>
           <form id="estoque-login-form" class="admin-form" autocomplete="off">
@@ -56,7 +62,7 @@
             <input id="estoque-usuario" type="text" required placeholder="admin" autocomplete="username">
             <label for="estoque-senha">Senha</label>
             <input id="estoque-senha" type="password" required placeholder="••••••" autocomplete="current-password">
-            <button class="btn btn-primary" type="submit">Entrar no estoque</button>
+            <button class="btn btn-primary btn-block-mobile" type="submit">Entrar no estoque</button>
           </form>
           <p class="section-desc admin-login-extra"><a href="index.html">← Voltar para a loja</a></p>
         </section>
@@ -64,14 +70,6 @@
         <div id="estoque-area" hidden>
 
           <div class="estoque-kpi-grid">
-            <article class="estoque-kpi">
-              <span class="estoque-kpi-value" id="kpi-total-pecas">0</span>
-              <span class="estoque-kpi-label">Peças cadastradas</span>
-            </article>
-            <article class="estoque-kpi">
-              <span class="estoque-kpi-value" id="kpi-total-secoes">0</span>
-              <span class="estoque-kpi-label">Seções</span>
-            </article>
             <article class="estoque-kpi estoque-kpi--critico">
               <span class="estoque-kpi-value" id="kpi-faltando">0</span>
               <span class="estoque-kpi-label">Em falta</span>
@@ -79,6 +77,14 @@
             <article class="estoque-kpi estoque-kpi--aviso">
               <span class="estoque-kpi-value" id="kpi-baixo">0</span>
               <span class="estoque-kpi-label">Estoque baixo</span>
+            </article>
+            <article class="estoque-kpi">
+              <span class="estoque-kpi-value" id="kpi-total-pecas">0</span>
+              <span class="estoque-kpi-label">Peças</span>
+            </article>
+            <article class="estoque-kpi">
+              <span class="estoque-kpi-value" id="kpi-total-secoes">0</span>
+              <span class="estoque-kpi-label">Seções</span>
             </article>
             <article class="estoque-kpi estoque-kpi--ok">
               <span class="estoque-kpi-value" id="kpi-ok">0</span>
@@ -89,7 +95,7 @@
           <div class="estoque-toolbar">
             <div class="estoque-search-wrap">
               <svg class="estoque-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              <input type="search" id="estoque-busca" class="estoque-search-input" placeholder="Buscar peça, modelo, iPhone, seção..." autocomplete="off">
+              <input type="search" id="estoque-busca" class="estoque-search-input" placeholder="Buscar peça, modelo, seção..." autocomplete="off" enterkeyhint="search">
               <button type="button" id="estoque-busca-limpar" class="estoque-search-clear" hidden aria-label="Limpar busca">×</button>
             </div>
             <div class="estoque-toolbar-row">
@@ -103,8 +109,8 @@
                 <option value="">Todas as seções</option>
               </select>
               <div class="estoque-view-toggle" role="group" aria-label="Modo de visualização">
-                <button type="button" class="estoque-view-btn estoque-view-btn--active" data-view="tabela">Lista geral</button>
-                <button type="button" class="estoque-view-btn" data-view="secoes">Por seção</button>
+                <button type="button" class="estoque-view-btn estoque-view-btn--active" data-view="tabela">Lista</button>
+                <button type="button" class="estoque-view-btn" data-view="secoes">Seções</button>
               </div>
             </div>
           </div>
@@ -112,17 +118,17 @@
           <p id="estoque-resultados" class="estoque-resultados"></p>
 
           <div class="estoque-toolbar-actions">
-            <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-relatorio">Relatório CSV</button>
-            <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-imprimir">Imprimir</button>
             <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-cadastro">+ Cadastro</button>
             <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-whatsapp">WhatsApp</button>
+            <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-relatorio">CSV</button>
+            <button type="button" class="btn btn-secondary btn-small" id="btn-estoque-imprimir">Imprimir</button>
           </div>
 
           <div id="estoque-lista-alertas" class="estoque-lista-alertas" hidden></div>
 
           <div id="estoque-tabela-wrap" class="estoque-master-wrap">
-            <div class="admin-table-wrap">
-              <table class="admin-table estoque-master-table">
+            <div class="admin-table-wrap estoque-table-scroll">
+              <table class="admin-table estoque-master-table estoque-table--cards-mobile">
                 <thead>
                   <tr>
                     <th>Seção</th>
@@ -144,7 +150,7 @@
           <p id="estoque-busca-vazia" class="estoque-empty" hidden>Nenhuma peça encontrada para esta busca ou filtro.</p>
 
           <details class="estoque-panel" id="panel-cadastro">
-            <summary>Cadastro rápido — seções e peças</summary>
+            <summary>Cadastro — seções e peças</summary>
             <div class="estoque-panel-body">
               <div class="estoque-presets">
                 <span class="estoque-presets-label">Seções comuns:</span>
@@ -163,7 +169,7 @@
                   <form id="form-estoque-secao" class="admin-form">
                     <label for="estoque-secao-nome">Nome da seção</label>
                     <input id="estoque-secao-nome" type="text" required placeholder="Ex: Telas iPhone">
-                    <button class="btn btn-primary" type="submit">Criar seção</button>
+                    <button class="btn btn-primary btn-block-mobile" type="submit">Criar seção</button>
                   </form>
                 </article>
                 <article class="admin-card">
@@ -194,7 +200,7 @@
                         </select>
                       </div>
                     </div>
-                    <button class="btn btn-primary" type="submit">Adicionar peça</button>
+                    <button class="btn btn-primary btn-block-mobile" type="submit">Adicionar peça</button>
                   </form>
                 </article>
               </div>
@@ -227,8 +233,8 @@
                     Alertas automáticos de estoque
                   </label>
                   <div class="admin-form-actions">
-                    <button class="btn btn-primary" type="submit">Salvar conexão</button>
-                    <button class="btn btn-secondary" type="button" id="btn-notif-testar">Enviar teste</button>
+                    <button class="btn btn-primary btn-block-mobile" type="submit">Salvar conexão</button>
+                    <button class="btn btn-secondary btn-block-mobile" type="button" id="btn-notif-testar">Enviar teste</button>
                   </div>
                 </form>
                 <p id="notificacao-status" class="notificacao-status"></p>
@@ -273,8 +279,8 @@
           </div>
         </div>
         <div class="admin-form-actions">
-          <button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-secondary btn-block-mobile" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary btn-block-mobile">Salvar</button>
         </div>
       </form>
     </div>
@@ -282,7 +288,7 @@
 
   <footer class="footer footer--compact">
     <div class="container">
-      <p class="footer-copy">&copy; 2026 KAUCELL · Estoque interno · <a href="admin.html">Admin</a></p>
+      <p class="footer-copy">&copy; 2026 KAUCELL · Estoque interno · <a href="admin.html">Admin</a> · <a href="index.html">Loja</a></p>
     </div>
   </footer>
 
