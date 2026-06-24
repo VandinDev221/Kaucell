@@ -207,20 +207,21 @@
               <article class="admin-card admin-card-full notificacao-card notificacao-card--flat">
                 <p class="section-desc">Receba alertas automáticos quando uma peça zerar ou ficar abaixo do mínimo.</p>
                 <div class="notificacao-passos">
-                  <p><strong>Como conectar (use o mesmo celular que receberá os alertas):</strong></p>
+                  <p><strong>Recomendado (produção):</strong> configure a variável <code>CALLMEBOT_APIKEY</code> no painel da Vercel (Settings → Environment Variables). O site usa essa chave automaticamente — não precisa salvar no formulário.</p>
+                  <p><strong>Como obter a API Key (mesmo celular que receberá os alertas):</strong></p>
                   <ol>
                     <li>Salve o contato <strong>CallMeBot</strong> com o número <strong>+34 694 23 67 31</strong>.</li>
-                    <li>No WhatsApp desse celular, envie a mensagem: <code>I allow callmebot to send me messages</code></li>
-                    <li>Aguarde a resposta com sua <strong>API Key</strong> (pode levar até 2 minutos).</li>
-                    <li>Cole a chave abaixo, clique em <strong>Salvar conexão</strong> e depois <strong>Enviar teste</strong>.</li>
+                    <li>No WhatsApp desse celular, envie: <code>I allow callmebot to send me messages</code></li>
+                    <li>Copie a <strong>API Key</strong> recebida e coloque na Vercel como <code>CALLMEBOT_APIKEY</code>.</li>
+                    <li>Aqui no estoque, informe só o <strong>WhatsApp</strong>, clique em <strong>Salvar conexão</strong> e depois <strong>Enviar teste</strong>.</li>
                   </ol>
-                  <p class="section-desc">A API Key é válida só para o número que enviou a autorização. Se aparecer “API Key inválida”, gere uma nova chave seguindo os passos acima.</p>
+                  <p class="section-desc">A chave só funciona para o número que autorizou o CallMeBot. Se der erro, gere uma nova chave e atualize a variável na Vercel.</p>
                 </div>
                 <form id="form-notificacoes" class="admin-form">
                   <label for="notif-telefone">WhatsApp (DDD + número)</label>
-                  <input id="notif-telefone" type="tel" required placeholder="Ex: 98991986345">
-                  <label for="notif-apikey">API Key CallMeBot</label>
-                  <input id="notif-apikey" type="password" placeholder="Cole a chave ou deixe em branco para manter">
+                  <input id="notif-telefone" type="tel" required placeholder="Ex: 98991808746">
+                  <label for="notif-apikey">API Key CallMeBot (opcional se usar Vercel)</label>
+                  <input id="notif-apikey" type="password" placeholder="Use CALLMEBOT_APIKEY na Vercel ou cole aqui">
                   <label class="checkbox-inline">
                     <input id="notif-ativo" type="checkbox" checked>
                     Alertas automáticos de estoque

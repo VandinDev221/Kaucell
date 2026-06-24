@@ -6,7 +6,8 @@ const {
   limparAlertasItem,
   removerAlertasItem,
   processarNotificacoesEstoque,
-  enviarTesteNotificacao
+  enviarTesteNotificacao,
+  getEnvApiKey
 } = require('../lib/estoque-notify');
 
 function sendJson(res, data, status = 200) {
@@ -83,6 +84,7 @@ function notificacoesPublicas(config) {
     ativo: config.ativo ? 1 : 0,
     conectado: !!config.conectado,
     apikey_mascarada: config.apikey_mascarada || '',
+    apikey_env: !!config.apikey_env,
     atualizado_em: config.atualizado_em || null
   };
 }
@@ -295,9 +297,10 @@ module.exports = async function handler(req, res) {
         const apikey = String(body.callmebot_apikey || '').trim();
         const ativo = body.ativo ? 1 : 0;
         const manterApikey = body.manter_apikey !== false;
+        const envApiKey = getEnvApiKey();
         if (!telefone) return json(res, { ok: false, message: 'Informe o WhatsApp com DDD.' }, 422);
-        if (!apikey && !manterApikey) {
-          return json(res, { ok: false, message: 'Informe a API Key do CallMeBot.' }, 422);
+        if (!envApiKey && !apikey && !manterApikey) {
+          return json(res, { ok: false, message: 'Informe a API Key do CallMeBot ou configure CALLMEBOT_APIKEY na Vercel.' }, 422);
         }
         try {
           const config = await salvarNotificacaoConfig({
@@ -307,7 +310,10 @@ module.exports = async function handler(req, res) {
             manter_apikey: manterApikey && !apikey
           });
           if (!config.callmebot_apikey) {
-            return json(res, { ok: false, message: 'Informe a API Key do CallMeBot.' }, 422);
+            return json(res, {
+              ok: false,
+              message: 'Informe a API Key do CallMeBot ou configure CALLMEBOT_APIKEY na Vercel.'
+            }, 422);
           }
           return json(res, { ok: true, notificacoes: notificacoesPublicas(config) });
         } catch (e) {

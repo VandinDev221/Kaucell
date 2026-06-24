@@ -40,6 +40,7 @@
   var estoqueUltimoHash = '';
   var ESTOQUE_POLL_MS = 8000;
   var notifApikeySalva = false;
+  var notifApikeyEnv = false;
   var estoqueCache = { secoes: [], alertas: { faltando: [], baixo: [] } };
   var filtroStatus = 'todos';
   var modoVisao = 'tabela';
@@ -379,17 +380,37 @@
     return digits;
   }
 
+  function configurarCampoApikey(notificacoes) {
+    var apikeyInput = document.getElementById('notif-apikey');
+    if (!apikeyInput) return;
+    notifApikeyEnv = !!(notificacoes && notificacoes.apikey_env);
+    if (notifApikeyEnv) {
+      apikeyInput.value = '';
+      apikeyInput.disabled = true;
+      apikeyInput.placeholder = 'Configurada no servidor (Vercel: CALLMEBOT_APIKEY)';
+      notifApikeySalva = true;
+    } else {
+      apikeyInput.disabled = false;
+      apikeyInput.placeholder = 'Cole a chave ou deixe em branco para manter';
+      notifApikeySalva = !!(notificacoes && notificacoes.conectado);
+    }
+  }
+
   function preencherNotificacoes(notificacoes) {
     if (!notificacoes) return;
     var telInput = document.getElementById('notif-telefone');
     var ativoInput = document.getElementById('notif-ativo');
     if (telInput) telInput.value = formatTelefoneExibicao(notificacoes.telefone);
     if (ativoInput) ativoInput.checked = !!notificacoes.ativo;
-    notifApikeySalva = !!notificacoes.conectado;
+    configurarCampoApikey(notificacoes);
     if (!notificacaoStatus) return;
     if (notificacoes.conectado) {
-      notificacaoStatus.textContent = 'WhatsApp conectado' + (notificacoes.apikey_mascarada ? ' · ' + notificacoes.apikey_mascarada : '');
+      var fonte = notificacoes.apikey_env ? ' · API Key no Vercel' : '';
+      notificacaoStatus.textContent = 'WhatsApp conectado' + fonte + (notificacoes.apikey_mascarada ? ' · ' + notificacoes.apikey_mascarada : '');
       notificacaoStatus.className = 'notificacao-status notificacao-status--ok';
+    } else if (notificacoes.apikey_env) {
+      notificacaoStatus.textContent = 'API Key configurada na Vercel. Informe o WhatsApp e salve a conexão.';
+      notificacaoStatus.className = 'notificacao-status';
     } else {
       notificacaoStatus.textContent = 'Configure o WhatsApp para receber alertas automáticos.';
       notificacaoStatus.className = 'notificacao-status';
@@ -723,7 +744,7 @@
       var apikey = document.getElementById('notif-apikey').value.trim();
       var ativo = document.getElementById('notif-ativo').checked;
       if (!telefone) { alert('Informe o WhatsApp.'); return; }
-      if (!apikey && !notifApikeySalva) { alert('Informe a API Key.'); return; }
+      if (!apikey && !notifApikeySalva && !notifApikeyEnv) { alert('Informe a API Key ou configure CALLMEBOT_APIKEY na Vercel.'); return; }
       request(API_ESTOQUE + '?acao=notificacoes_salvar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

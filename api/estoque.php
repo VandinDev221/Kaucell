@@ -104,22 +104,30 @@ function estoque_mascarar_apikey(string $key): string
     return str_repeat('*', max(4, strlen($k) - 4)) . substr($k, -4);
 }
 
+function estoque_env_apikey(): string
+{
+    return trim((string)(getenv('CALLMEBOT_APIKEY') ?: getenv('CALLMEBOT_API_KEY') ?: ''));
+}
+
 function estoque_get_notificacao_config(PDO $pdo): array
 {
     $stmt = $pdo->query('SELECT telefone, callmebot_apikey, ativo, atualizado_em FROM estoque_notificacoes WHERE id = 1');
     $row = $stmt ? $stmt->fetch() : false;
+    $envKey = estoque_env_apikey();
     if (!$row) {
         return [
             'telefone' => '',
-            'callmebot_apikey' => '',
+            'callmebot_apikey' => $envKey,
             'ativo' => 0,
             'conectado' => false,
             'telefone_formatado' => '',
-            'apikey_mascarada' => '',
+            'apikey_mascarada' => estoque_mascarar_apikey($envKey),
+            'apikey_env' => $envKey !== '',
         ];
     }
     $telefone = (string)($row['telefone'] ?? '');
-    $apikey = (string)($row['callmebot_apikey'] ?? '');
+    $dbKey = (string)($row['callmebot_apikey'] ?? '');
+    $apikey = $envKey !== '' ? $envKey : $dbKey;
     return [
         'telefone' => $telefone,
         'callmebot_apikey' => $apikey,
@@ -127,6 +135,7 @@ function estoque_get_notificacao_config(PDO $pdo): array
         'conectado' => $telefone !== '' && $apikey !== '',
         'telefone_formatado' => $telefone,
         'apikey_mascarada' => estoque_mascarar_apikey($apikey),
+        'apikey_env' => $envKey !== '',
         'atualizado_em' => $row['atualizado_em'] ?? null,
     ];
 }
@@ -138,6 +147,7 @@ function estoque_notificacoes_publicas(array $config): array
         'ativo' => !empty($config['ativo']) ? 1 : 0,
         'conectado' => !empty($config['conectado']),
         'apikey_mascarada' => $config['apikey_mascarada'] ?? '',
+        'apikey_env' => !empty($config['apikey_env']),
         'atualizado_em' => $config['atualizado_em'] ?? null,
     ];
 }
@@ -146,8 +156,8 @@ function estoque_parse_callmebot_erro(string $body): string
 {
     $text = trim(preg_replace('/\s+/', ' ', strip_tags($body)));
     if (preg_match('/apikey is invalid/i', $text)) {
-        return 'API Key inválida. No WhatsApp do número cadastrado, envie "I allow callmebot to send me messages" '
-            . 'para o contato CallMeBot (+34 694 23 67 31), copie a nova chave e cole aqui.';
+        return 'API Key inválida. Atualize a variável CALLMEBOT_APIKEY na Vercel ou gere uma nova no CallMeBot '
+            . '(+34 694 23 67 31) com o mesmo número cadastrado no estoque.';
     }
     if (preg_match('/phone.*invalid|invalid phone/i', $text)) {
         return 'Número de WhatsApp inválido. Use DDD + número (ex: 98991808746).';
@@ -177,10 +187,30 @@ function estoque_salvar_notificacao_config(PDO $pdo, array $data): array
 {
     $tel = estoque_normalizar_telefone((string)($data['telefone'] ?? ''));
     $ativo = !empty($data['ativo']) ? 1 : 0;
+    $envKey = estoque_env_apikey();
+
+    if ($envKey !== '') {
+        $stmt = $pdo->prepare('
+            INSERT INTO estoque_notificacoes (id, telefone, callmebot_apikey, ativo, atualizado_em)
+            VALUES (1, :telefone, NULL, :ativo, datetime(\'now\'))
+            ON CONFLICT(id) DO UPDATE SET
+                telefone = excluded.telefone,
+                ativo = excluded.ativo,
+                atualizado_em = datetime(\'now\')
+        ');
+        $stmt->execute([
+            ':telefone' => $tel !== '' ? $tel : null,
+            ':ativo' => $ativo,
+        ]);
+        return estoque_get_notificacao_config($pdo);
+    }
+
     $apikey = trim((string)($data['callmebot_apikey'] ?? ''));
-    $atual = estoque_get_notificacao_config($pdo);
-    if ($apikey === '' && !empty($data['manter_apikey']) && $atual['callmebot_apikey'] !== '') {
-        $apikey = $atual['callmebot_apikey'];
+    $stmtDb = $pdo->query('SELECT callmebot_apikey FROM estoque_notificacoes WHERE id = 1');
+    $dbRow = $stmtDb ? $stmtDb->fetch() : false;
+    $dbCurrent = (string)($dbRow['callmebot_apikey'] ?? '');
+    if ($apikey === '' && !empty($data['manter_apikey']) && $dbCurrent !== '') {
+        $apikey = $dbCurrent;
     }
     $stmt = $pdo->prepare('
         INSERT INTO estoque_notificacoes (id, telefone, callmebot_apikey, ativo, atualizado_em)
@@ -474,7 +504,7 @@ try {
                 'manter_apikey' => $manterApikey && $apikey === '',
             ]);
             if ($config['callmebot_apikey'] === '') {
-                api_json(['ok' => false, 'message' => 'Informe a API Key do CallMeBot.'], 422);
+                api_json(['ok' => false, 'message' => 'Informe a API Key do CallMeBot ou configure CALLMEBOT_APIKEY na Vercel.'], 422);
             }
             api_json(['ok' => true, 'notificacoes' => estoque_notificacoes_publicas($config)]);
         }

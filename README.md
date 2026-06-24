@@ -49,6 +49,7 @@ Frontend estático + API (PHP local / serverless no Vercel).
 
 2. **Variáveis de ambiente**
    - `ADMIN_USER` e `ADMIN_PASS` para o painel admin
+   - `CALLMEBOT_APIKEY` — API Key do CallMeBot para alertas de estoque no WhatsApp (recomendado em produção)
    - Vercel Postgres e Vercel Blob conectados ao projeto
 
 3. Após o deploy, a raiz do site exibe a página inicial (conteúdo de `public/`).
