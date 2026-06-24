@@ -62,29 +62,32 @@
 
       <header class="estoque-app-bar">
         <div class="container estoque-app-bar-inner">
-          <div>
+          <div class="estoque-app-bar-text">
             <p class="estoque-app-eyebrow">Assistência KAUCELL</p>
             <h1 class="estoque-app-title">Estoque <span id="estoque-header-badge" class="estoque-app-badge" hidden>0</span></h1>
           </div>
-          <div class="estoque-live-bar estoque-live-bar--app">
-            <span class="estoque-live-dot" aria-hidden="true"></span>
-            <span id="estoque-live-text">Ao vivo</span>
+          <div class="estoque-app-bar-actions">
+            <div class="estoque-live-bar estoque-live-bar--app">
+              <span class="estoque-live-dot" aria-hidden="true"></span>
+              <span id="estoque-live-text">Ao vivo</span>
+            </div>
+            <button type="button" class="estoque-app-add" data-tab="cadastro" aria-label="Cadastrar peça">+</button>
           </div>
         </div>
       </header>
 
-      <nav class="estoque-desk-nav" aria-label="Seções do estoque">
-        <div class="container estoque-desk-nav-inner">
-          <button type="button" class="estoque-nav-btn is-active" data-tab="pecas">Peças</button>
-          <button type="button" class="estoque-nav-btn" data-tab="alertas">Alertas</button>
-          <button type="button" class="estoque-nav-btn estoque-nav-btn--primary" data-tab="cadastro">+ Nova peça</button>
-          <button type="button" class="estoque-nav-btn" data-tab="config">WhatsApp</button>
+      <nav class="estoque-tabs" aria-label="Seções do estoque">
+        <div class="container estoque-tabs-inner">
+          <button type="button" class="estoque-tab-btn is-active" data-tab="pecas">Peças</button>
+          <button type="button" class="estoque-tab-btn" data-tab="alertas">Alertas</button>
+          <button type="button" class="estoque-tab-btn estoque-tab-btn--accent" data-tab="cadastro">Nova peça</button>
+          <button type="button" class="estoque-tab-btn" data-tab="config">WhatsApp</button>
         </div>
       </nav>
 
-      <div id="estoque-tab-pecas" class="estoque-tab is-active">
-        <div class="container estoque-tab-inner">
-          <div class="estoque-kpi-strip">
+      <div id="estoque-tab-pecas" class="estoque-tab-panel is-active">
+        <div class="container estoque-panel-inner">
+          <div class="estoque-kpi-strip" aria-label="Resumo do estoque">
             <button type="button" class="estoque-kpi-pill estoque-kpi-pill--critico" data-filtro-rapido="faltando">
               <span class="estoque-kpi-pill-val" id="kpi-faltando">0</span>
               <span class="estoque-kpi-pill-label">Em falta</span>
@@ -109,13 +112,15 @@
 
           <div class="estoque-search-bar">
             <svg class="estoque-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <input type="search" id="estoque-busca" class="estoque-search-input" placeholder="Buscar iPhone, tela, bateria, conector..." autocomplete="off" enterkeyhint="search">
+            <input type="search" id="estoque-busca" class="estoque-search-input" placeholder="Buscar peça, modelo, seção..." autocomplete="off" enterkeyhint="search">
             <button type="button" id="estoque-busca-limpar" class="estoque-search-clear" hidden aria-label="Limpar">×</button>
           </div>
 
-          <div id="estoque-chips-secao" class="estoque-chips" role="tablist" aria-label="Categorias"></div>
+          <p class="estoque-filter-label">Seção</p>
+          <div id="estoque-chips-secao" class="estoque-chips" role="tablist" aria-label="Filtrar por seção"></div>
 
-          <div class="estoque-filtros-bar" role="group" aria-label="Status">
+          <p class="estoque-filter-label">Status</p>
+          <div class="estoque-filtros-bar" role="group" aria-label="Filtrar por status">
             <button type="button" class="estoque-filtro estoque-filtro--active" data-filtro="todos">Todas</button>
             <button type="button" class="estoque-filtro" data-filtro="faltando">Em falta</button>
             <button type="button" class="estoque-filtro" data-filtro="baixo">Baixo</button>
@@ -132,7 +137,7 @@
           <div id="estoque-cards-list" class="estoque-cards"></div>
 
           <div id="estoque-tabela-wrap" class="estoque-desk-table" hidden>
-            <div class="admin-table-wrap">
+            <div class="admin-table-wrap estoque-table-scroll">
               <table class="admin-table estoque-master-table">
                 <thead>
                   <tr>
@@ -150,8 +155,7 @@
             </div>
           </div>
 
-          <div id="estoque-secoes-container" class="estoque-secoes" hidden></div>
-          <p id="estoque-busca-vazia" class="estoque-empty" hidden>Nenhuma peça encontrada.</p>
+          <p id="estoque-busca-vazia" class="estoque-empty" hidden>Nenhuma peça encontrada para este filtro.</p>
 
           <select id="estoque-filtro-secao" class="visually-hidden" aria-hidden="true" tabindex="-1">
             <option value="">Todas as seções</option>
@@ -159,21 +163,22 @@
         </div>
       </div>
 
-      <div id="estoque-tab-alertas" class="estoque-tab" hidden>
-        <div class="container estoque-tab-inner">
-          <h2 class="estoque-tab-title">Alertas de estoque</h2>
-          <p class="estoque-tab-desc">Peças zeradas ou abaixo do mínimo configurado.</p>
+      <div id="estoque-tab-alertas" class="estoque-tab-panel" hidden>
+        <div class="container estoque-panel-inner">
+          <h2 class="estoque-panel-title">Alertas de estoque</h2>
+          <p class="estoque-panel-desc">Peças zeradas ou abaixo do mínimo configurado.</p>
           <div id="estoque-lista-alertas" class="estoque-lista-alertas estoque-lista-alertas--page"></div>
-          <div class="estoque-tab-actions">
+          <div class="estoque-panel-actions">
             <button type="button" class="btn btn-secondary btn-block-mobile" id="btn-estoque-relatorio">Exportar CSV</button>
             <button type="button" class="btn btn-secondary btn-block-mobile" id="btn-estoque-imprimir">Imprimir</button>
           </div>
         </div>
       </div>
 
-      <div id="estoque-tab-cadastro" class="estoque-tab" hidden>
-        <div class="container estoque-tab-inner">
-          <h2 class="estoque-tab-title">Cadastrar peças</h2>
+      <div id="estoque-tab-cadastro" class="estoque-tab-panel" hidden>
+        <div class="container estoque-panel-inner">
+          <h2 class="estoque-panel-title">Cadastrar peças</h2>
+          <p class="estoque-panel-desc">Primeiro crie uma seção (ex.: Telas), depois adicione as peças.</p>
           <div class="estoque-presets">
             <span class="estoque-presets-label">Seções rápidas:</span>
             <button type="button" class="estoque-preset-btn" data-preset="Telas">Telas</button>
@@ -184,17 +189,17 @@
             <button type="button" class="estoque-preset-btn" data-preset="Tampas traseiras">Tampas</button>
             <button type="button" class="estoque-preset-btn" data-preset="Câmeras">Câmeras</button>
           </div>
-          <div class="admin-grid">
+          <div class="admin-grid estoque-cadastro-grid">
             <article class="admin-card">
-              <h3 class="admin-card-title">Nova seção</h3>
+              <h3 class="admin-card-title">1. Nova seção</h3>
               <form id="form-estoque-secao" class="admin-form">
-                <label for="estoque-secao-nome">Nome</label>
+                <label for="estoque-secao-nome">Nome da seção</label>
                 <input id="estoque-secao-nome" type="text" required placeholder="Ex: Telas iPhone">
                 <button class="btn btn-primary btn-block-mobile" type="submit">Criar seção</button>
               </form>
             </article>
             <article class="admin-card">
-              <h3 class="admin-card-title">Nova peça</h3>
+              <h3 class="admin-card-title">2. Nova peça</h3>
               <form id="form-estoque-item" class="admin-form">
                 <label for="estoque-item-secao">Seção</label>
                 <select id="estoque-item-secao" required><option value="">Selecione</option></select>
@@ -202,7 +207,7 @@
                 <input id="estoque-item-nome" type="text" required placeholder="Ex: Tela iPhone 11 Pro Max">
                 <div class="estoque-form-row">
                   <div>
-                    <label for="estoque-item-qtd">Qtd</label>
+                    <label for="estoque-item-qtd">Quantidade</label>
                     <input id="estoque-item-qtd" type="number" min="0" value="0" required>
                   </div>
                   <div>
@@ -210,7 +215,7 @@
                     <input id="estoque-item-min" type="number" min="0" value="2" required>
                   </div>
                   <div>
-                    <label for="estoque-item-unidade">Un.</label>
+                    <label for="estoque-item-unidade">Unidade</label>
                     <select id="estoque-item-unidade">
                       <option value="un">un</option>
                       <option value="pç">pç</option>
@@ -226,9 +231,9 @@
         </div>
       </div>
 
-      <div id="estoque-tab-config" class="estoque-tab" hidden>
-        <div class="container estoque-tab-inner">
-          <h2 class="estoque-tab-title">WhatsApp & alertas</h2>
+      <div id="estoque-tab-config" class="estoque-tab-panel" hidden>
+        <div class="container estoque-panel-inner">
+          <h2 class="estoque-panel-title">WhatsApp e alertas</h2>
           <article class="admin-card notificacao-card">
             <p class="section-desc">Receba aviso automático quando zerar ou ficar abaixo do mínimo.</p>
             <div class="notificacao-passos">
@@ -257,25 +262,6 @@
           </article>
         </div>
       </div>
-
-      <nav class="estoque-bottom-nav" aria-label="Menu do estoque">
-        <button type="button" class="estoque-nav-btn is-active" data-tab="pecas">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-          Peças
-        </button>
-        <button type="button" class="estoque-nav-btn" data-tab="alertas">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 5c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-          Alertas
-        </button>
-        <button type="button" class="estoque-nav-btn estoque-nav-btn--primary" data-tab="cadastro">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-          Nova
-        </button>
-        <button type="button" class="estoque-nav-btn" data-tab="config">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-          Config
-        </button>
-      </nav>
     </div>
   </main>
 

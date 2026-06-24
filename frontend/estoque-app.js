@@ -170,7 +170,7 @@
   }
 
   function usarTabelaDesktop() {
-    return window.matchMedia('(min-width: 1024px)').matches;
+    return window.matchMedia('(min-width: 769px)').matches;
   }
 
   function buildCardHtml(item) {
@@ -226,9 +226,12 @@
         painel.classList.toggle('is-active', nome === estoqueTabAtiva);
       }
     });
-    document.querySelectorAll('.estoque-nav-btn').forEach(function (btn) {
-      btn.classList.toggle('is-active', btn.getAttribute('data-tab') === estoqueTabAtiva);
+    document.querySelectorAll('.estoque-tab-btn, .estoque-app-add').forEach(function (btn) {
+      var tabBtn = btn.getAttribute('data-tab');
+      if (!tabBtn) return;
+      btn.classList.toggle('is-active', tabBtn === estoqueTabAtiva);
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function aplicarFiltroRapido(status) {
@@ -709,7 +712,7 @@
     });
   }
 
-  document.querySelectorAll('.estoque-nav-btn').forEach(function (btn) {
+  document.querySelectorAll('.estoque-tab-btn, .estoque-app-add').forEach(function (btn) {
     btn.addEventListener('click', function () {
       trocarTab(btn.getAttribute('data-tab') || 'pecas');
     });
@@ -840,6 +843,7 @@
         formEstoqueItem.reset();
         document.getElementById('estoque-item-qtd').value = '0';
         document.getElementById('estoque-item-min').value = '2';
+        trocarTab('pecas');
         carregarEstoque({ forcar: true, tempoReal: true });
       }).catch(function () { alert('Erro ao cadastrar peça.'); });
     });
