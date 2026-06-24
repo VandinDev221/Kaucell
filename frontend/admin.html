@@ -15,15 +15,13 @@
   <header class="header">
     <div class="container header-inner">
       <a href="index.html" class="logo"><img src="/logo.png" alt="KAUCELL" class="logo-img">KAU<span>CELL</span></a>
-      <nav class="nav">
+      <nav class="nav" aria-label="Menu principal">
         <a href="index.html" class="nav-link">Início</a>
         <a href="servicos.html" class="nav-link">Serviços</a>
         <a href="produtos.html" class="nav-link">Produtos</a>
         <a href="blog.html" class="nav-link">Blog</a>
-        <a href="estoque.html" class="nav-link">Estoque</a>
         <a href="admin.html" class="nav-link nav-link--active">Admin</a>
       </nav>
-      <a href="estoque.html" class="btn btn-secondary admin-estoque-top">Estoque</a>
       <a href="admin.html?logout=1" class="btn btn-secondary admin-logout-top">Sair</a>
       <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
         <span></span>
@@ -57,8 +55,7 @@
             <button class="btn btn-primary" type="submit">Entrar</button>
           </form>
           <p class="section-desc admin-login-extra">
-            Ou acesse o <a href="estoque.html"><strong>controle de estoque</strong></a> em
-            <code class="admin-url-hint">/estoque.html</code>
+            Após entrar, use a aba <strong>Estoque</strong> para gerenciar peças.
           </p>
         </section>
 
@@ -67,17 +64,18 @@
           <button type="button" class="admin-tab admin-tab--active" data-tab="produtos" role="tab" aria-selected="true">Produtos</button>
           <button type="button" class="admin-tab" data-tab="servicos" role="tab" aria-selected="false">Serviços</button>
           <button type="button" class="admin-tab" data-tab="blog" role="tab" aria-selected="false">Blog</button>
+          <button type="button" class="admin-tab" data-tab="estoque" role="tab" aria-selected="false">Estoque</button>
         </nav>
 
+        <div id="tab-estoque" class="admin-tab-panel" role="tabpanel" hidden>
         <article class="admin-card admin-card-full admin-link-card">
-          <h2 class="admin-card-title">Controle de estoque</h2>
-          <p class="section-desc">Gerencie peças, alertas em tempo real e notificações WhatsApp na página dedicada.</p>
-          <p class="admin-url-line">URL: <code class="admin-url-hint">/estoque.html</code></p>
+          <h2 class="admin-card-title">Controle de estoque de peças</h2>
+          <p class="section-desc">Gerencie telas, baterias, conectores e componentes. Alertas em tempo real e notificações WhatsApp.</p>
           <div class="admin-form-actions">
             <a href="estoque.html" class="btn btn-primary">Abrir painel de estoque</a>
-            <a href="estoque.html" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
           </div>
         </article>
+        </div>
 
         <div id="tab-produtos" class="admin-tab-panel" role="tabpanel">
         <div class="admin-grid">
@@ -248,7 +246,6 @@
             <li><a href="servicos.html">Serviços</a></li>
             <li><a href="produtos.html">Produtos</a></li>
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="estoque.html">Controle de estoque</a></li>
             <li><a href="admin.html">Administração</a></li>
           </ul>
         </div>

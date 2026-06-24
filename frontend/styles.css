@@ -3151,6 +3151,65 @@ body.nav-open .nav-overlay {
   overflow: hidden;
 }
 
+.estoque-desk-nav {
+  display: none;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
+}
+
+.estoque-desk-nav-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.estoque-desk-nav .estoque-nav-btn {
+  flex-direction: row;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.estoque-desk-nav .estoque-nav-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.estoque-desk-nav .estoque-nav-btn.is-active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.estoque-desk-nav .estoque-nav-btn--primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.estoque-empty-cta {
+  text-align: center;
+  padding: 2rem 1rem;
+  margin: 0.5rem 0 1rem;
+  background: #fff;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.estoque-empty-cta p {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+}
+
+.header--interno .nav--interno {
+  gap: 0.5rem;
+}
+
 .estoque-bottom-nav {
   position: fixed;
   left: 0;
@@ -3216,6 +3275,7 @@ body.nav-open .nav-overlay {
 
 @media (min-width: 1024px) {
   .estoque-bottom-nav { display: none; }
+  .estoque-desk-nav { display: block; }
   .estoque-app { padding-bottom: 2rem; }
   .estoque-cards { display: none; }
 }

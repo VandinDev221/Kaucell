@@ -34,6 +34,8 @@
   var estoqueBannerCritico = document.getElementById('estoque-banner-critico');
   var btnVerFaltando = document.getElementById('btn-ver-faltando');
   var estoqueResultados = document.getElementById('estoque-resultados');
+  var estoqueEmptyCta = document.getElementById('estoque-empty-cta');
+  var btnEstoqueIrCadastro = document.getElementById('btn-estoque-ir-cadastro');
   var estoqueModal = document.getElementById('estoque-modal');
   var formEditarItem = document.getElementById('form-editar-item');
   var editSelectSecao = document.getElementById('edit-item-secao');
@@ -348,9 +350,11 @@
   function renderResultados(total, filtrados, totalGeral) {
     if (!estoqueResultados) return;
     if (totalGeral === 0) {
-      estoqueResultados.textContent = 'Nenhuma peça cadastrada. Toque em Nova para começar.';
+      estoqueResultados.textContent = '';
+      if (estoqueEmptyCta) estoqueEmptyCta.hidden = false;
       return;
     }
+    if (estoqueEmptyCta) estoqueEmptyCta.hidden = true;
     if (termoBusca || filtroStatus !== 'todos' || (estoqueFiltroSecao && estoqueFiltroSecao.value)) {
       estoqueResultados.textContent = 'Exibindo ' + filtrados + ' de ' + totalGeral + ' peças';
     } else {
@@ -710,6 +714,14 @@
       trocarTab(btn.getAttribute('data-tab') || 'pecas');
     });
   });
+
+  if (btnEstoqueIrCadastro) {
+    btnEstoqueIrCadastro.addEventListener('click', function () {
+      trocarTab('cadastro');
+      var input = document.getElementById('estoque-item-nome');
+      if (input) input.focus();
+    });
+  }
 
   window.addEventListener('resize', function () {
     if (!estoqueArea || estoqueArea.hidden) return;

@@ -14,16 +14,11 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="estoque-body" data-page="estoque">
-  <header class="header header--estoque">
+  <header class="header header--estoque header--interno">
     <div class="container header-inner">
-      <a href="index.html" class="logo"><img src="/logo.png" alt="" class="logo-img" width="40" height="40">KAU<span>CELL</span></a>
-      <nav class="nav" aria-label="Menu principal">
-        <a href="index.html" class="nav-link">Início</a>
-        <a href="servicos.html" class="nav-link">Serviços</a>
-        <a href="produtos.html" class="nav-link">Produtos</a>
-        <a href="blog.html" class="nav-link">Blog</a>
-        <a href="estoque.html" class="nav-link nav-link--active">Estoque</a>
-        <a href="admin.html" class="nav-link">Admin</a>
+      <a href="admin.html" class="logo"><img src="/logo.png" alt="" class="logo-img" width="40" height="40">KAU<span>CELL</span></a>
+      <nav class="nav nav--interno" aria-label="Painel interno">
+        <a href="admin.html" class="nav-link">← Admin</a>
         <a href="#" class="nav-link nav-link--logout" id="estoque-logout" hidden>Sair</a>
       </nav>
       <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
@@ -48,7 +43,7 @@
             <input id="estoque-senha" type="password" required placeholder="••••••" autocomplete="current-password">
             <button class="btn btn-primary btn-block-mobile" type="submit">Entrar</button>
           </form>
-          <p class="estoque-login-footer"><a href="index.html">← Voltar para a loja</a></p>
+          <p class="estoque-login-footer"><a href="admin.html">← Voltar ao Admin</a></p>
         </div>
       </div>
     </section>
@@ -77,6 +72,15 @@
           </div>
         </div>
       </header>
+
+      <nav class="estoque-desk-nav" aria-label="Seções do estoque">
+        <div class="container estoque-desk-nav-inner">
+          <button type="button" class="estoque-nav-btn is-active" data-tab="pecas">Peças</button>
+          <button type="button" class="estoque-nav-btn" data-tab="alertas">Alertas</button>
+          <button type="button" class="estoque-nav-btn estoque-nav-btn--primary" data-tab="cadastro">+ Nova peça</button>
+          <button type="button" class="estoque-nav-btn" data-tab="config">WhatsApp</button>
+        </div>
+      </nav>
 
       <div id="estoque-tab-pecas" class="estoque-tab is-active">
         <div class="container estoque-tab-inner">
@@ -119,6 +123,11 @@
           </div>
 
           <p id="estoque-resultados" class="estoque-resultados"></p>
+
+          <div id="estoque-empty-cta" class="estoque-empty-cta" hidden>
+            <p>Nenhuma peça cadastrada ainda.</p>
+            <button type="button" class="btn btn-primary" id="btn-estoque-ir-cadastro">+ Cadastrar primeira peça</button>
+          </div>
 
           <div id="estoque-cards-list" class="estoque-cards"></div>
 
