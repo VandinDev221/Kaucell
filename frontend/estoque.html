@@ -53,9 +53,9 @@
           <p class="section-desc">Use o mesmo usuário e senha do painel admin.</p>
           <form id="estoque-login-form" class="admin-form" autocomplete="off">
             <label for="estoque-usuario">Usuário</label>
-            <input id="estoque-usuario" type="text" required placeholder="admin">
+            <input id="estoque-usuario" type="text" required placeholder="admin" autocomplete="username">
             <label for="estoque-senha">Senha</label>
-            <input id="estoque-senha" type="password" required placeholder="••••••">
+            <input id="estoque-senha" type="password" required placeholder="••••••" autocomplete="current-password">
             <button class="btn btn-primary" type="submit">Entrar no estoque</button>
           </form>
           <p class="section-desc admin-login-extra"><a href="index.html">← Voltar para a loja</a></p>
@@ -219,9 +219,9 @@
                 </div>
                 <form id="form-notificacoes" class="admin-form">
                   <label for="notif-telefone">WhatsApp (DDD + número)</label>
-                  <input id="notif-telefone" type="tel" required placeholder="Ex: 98991808746">
+                  <input id="notif-telefone" type="tel" required placeholder="Ex: 98991808746" autocomplete="tel">
                   <label for="notif-apikey">API Key CallMeBot (opcional se usar Vercel)</label>
-                  <input id="notif-apikey" type="password" placeholder="Use CALLMEBOT_APIKEY na Vercel ou cole aqui">
+                  <input id="notif-apikey" type="password" placeholder="Use CALLMEBOT_APIKEY na Vercel ou cole aqui" autocomplete="off">
                   <label class="checkbox-inline">
                     <input id="notif-ativo" type="checkbox" checked>
                     Alertas automáticos de estoque

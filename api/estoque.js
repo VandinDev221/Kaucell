@@ -10,9 +10,11 @@ const {
   getEnvApiKey
 } = require('../lib/estoque-notify');
 
-function sendJson(res, data, status = 200) {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.status(status).json(data);
+function isCronAuthorized(req) {
+  const secret = String(process.env.CRON_SECRET || process.env.ESTOQUE_CRON_SECRET || '').trim();
+  if (!secret) return false;
+  const auth = String(req.headers.authorization || req.headers['Authorization'] || '').trim();
+  return auth === 'Bearer ' + secret;
 }
 
 function classificarItem(item) {
@@ -114,11 +116,28 @@ module.exports = async function handler(req, res) {
     const id = parseInt(url.searchParams.get('id') || '0', 10);
     const acao = url.searchParams.get('acao') || '';
     const relatorio = url.searchParams.get('relatorio') === '1';
-    const tempoReal = url.searchParams.get('tempo_real') === '1';
     const isAdmin = getAdminFromCookie(req.headers.cookie);
 
     if (req.method === 'GET') {
       try {
+        if (acao === 'cron_notificar') {
+          if (!isCronAuthorized(req)) {
+            return json(res, { ok: false, message: 'Não autorizado.' }, 401);
+          }
+          const dados = await listarEstoque();
+          const result = await processarNotificacoesEstoque(dados.alertas);
+          return json(res, {
+            ok: true,
+            cron: true,
+            ...result,
+            alertas: {
+              faltando: dados.alertas.faltando.length,
+              baixo: dados.alertas.baixo.length
+            },
+            checado_em: new Date().toISOString()
+          });
+        }
+
         const dados = await listarEstoque();
         if (relatorio) {
           return json(res, {
@@ -131,9 +150,7 @@ module.exports = async function handler(req, res) {
 
         let notificacoes = null;
         if (isAdmin) {
-          if (tempoReal) {
-            await processarNotificacoesEstoque(dados.alertas);
-          }
+          await processarNotificacoesEstoque(dados.alertas);
           notificacoes = notificacoesPublicas(await getNotificacaoConfig());
         }
 
@@ -338,6 +355,6 @@ module.exports = async function handler(req, res) {
     json(res, { ok: false, message: 'Método não permitido.' }, 405);
   } catch (err) {
     console.error('estoque handler:', err);
-    sendJson(res, { ok: false, message: 'Erro no servidor.', error: String(err && err.message) }, 500);
+    json(res, { ok: false, message: 'Erro no servidor.', error: String(err && err.message) }, 500);
   }
 };

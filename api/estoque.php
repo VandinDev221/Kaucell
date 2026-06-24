@@ -292,6 +292,27 @@ try {
     $tempoReal = isset($_GET['tempo_real']) && $_GET['tempo_real'] === '1';
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        if ($acao === 'cron_notificar') {
+            $secret = trim((string)(getenv('CRON_SECRET') ?: getenv('ESTOQUE_CRON_SECRET') ?: ''));
+            $auth = trim((string)($_SERVER['HTTP_AUTHORIZATION'] ?? ''));
+            if ($secret === '' || $auth !== 'Bearer ' . $secret) {
+                api_json(['ok' => false, 'message' => 'Não autorizado.'], 401);
+            }
+            $dados = estoque_listar($pdo);
+            $result = estoque_processar_notificacoes($pdo, $dados['alertas']);
+            api_json([
+                'ok' => true,
+                'cron' => true,
+                'enviados' => $result['enviados'],
+                'ignorados' => $result['ignorados'],
+                'alertas' => [
+                    'faltando' => count($dados['alertas']['faltando']),
+                    'baixo' => count($dados['alertas']['baixo']),
+                ],
+                'checado_em' => date('c'),
+            ]);
+        }
+
         $dados = estoque_listar($pdo);
         if ($relatorio) {
             api_json([
@@ -308,9 +329,7 @@ try {
             'atualizado_em' => date('c'),
         ];
         if (api_is_admin()) {
-            if ($tempoReal) {
-                estoque_processar_notificacoes($pdo, $dados['alertas']);
-            }
+            estoque_processar_notificacoes($pdo, $dados['alertas']);
             $payload['notificacoes'] = estoque_notificacoes_publicas(estoque_get_notificacao_config($pdo));
         }
         api_json($payload);

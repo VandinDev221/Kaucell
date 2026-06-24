@@ -38,7 +38,7 @@
 
   var estoquePollId = null;
   var estoqueUltimoHash = '';
-  var ESTOQUE_POLL_MS = 8000;
+  var ESTOQUE_POLL_MS = 5000;
   var notifApikeySalva = false;
   var notifApikeyEnv = false;
   var estoqueCache = { secoes: [], alertas: { faltando: [], baixo: [] } };

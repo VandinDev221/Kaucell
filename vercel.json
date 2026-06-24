@@ -2,6 +2,12 @@
   "version": 2,
   "buildCommand": "node scripts/copy-frontend.js",
   "outputDirectory": "public",
+  "crons": [
+    {
+      "path": "/api/estoque?acao=cron_notificar",
+      "schedule": "* * * * *"
+    }
+  ],
   "rewrites": [
     { "source": "/api/produtos.php", "destination": "/api/produtos" },
     { "source": "/api/servicos.php", "destination": "/api/servicos" },
