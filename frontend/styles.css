@@ -2680,6 +2680,501 @@ body.nav-open .nav-overlay {
   .blog-grid { grid-template-columns: 1fr; }
 }
 
+/* ===== ESTOQUE APP — padrão loja de celular ===== */
+.estoque-body {
+  background: #e2e8f0;
+}
+
+.estoque-body--ativo {
+  background: #eef2f6;
+}
+
+.estoque-body--ativo .header--estoque {
+  background: #0c4a6e;
+  border-bottom: none;
+  box-shadow: 0 4px 20px rgba(12, 74, 110, 0.25);
+}
+
+.estoque-body--ativo .header--estoque .logo,
+.estoque-body--ativo .header--estoque .nav-link {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.estoque-body--ativo .header--estoque .nav-link--active,
+.estoque-body--ativo .header--estoque .nav-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.estoque-body--ativo .header--estoque .menu-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.estoque-body--ativo .header--estoque .menu-toggle span {
+  background: #fff;
+}
+
+.main--estoque {
+  padding-top: var(--header-h);
+  padding-bottom: 0;
+  min-height: 100dvh;
+}
+
+.estoque-login {
+  padding: 2.5rem 0 3rem;
+  min-height: calc(100dvh - var(--header-h));
+  display: flex;
+  align-items: center;
+}
+
+.estoque-login-card {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+
+.estoque-login-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.estoque-login-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  margin: 0 0 0.5rem;
+}
+
+.estoque-login-desc {
+  color: var(--text-secondary);
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+}
+
+.estoque-login-footer {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.estoque-app {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0));
+}
+
+.estoque-banner {
+  background: #fef2f2;
+  border-bottom: 1px solid #fecaca;
+}
+
+.estoque-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.estoque-banner-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.estoque-banner-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.85rem;
+}
+
+.estoque-banner-text strong { color: #991b1b; }
+
+.estoque-banner-btn {
+  flex-shrink: 0;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: none;
+  background: #b91c1c;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.estoque-app-bar {
+  background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
+  color: #fff;
+  padding: 1rem 0 1.15rem;
+}
+
+.estoque-app-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.estoque-app-eyebrow {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+}
+
+.estoque-app-title {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.estoque-app-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.estoque-live-bar--app {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.estoque-tab-inner {
+  padding: 1rem 0 1.5rem;
+}
+
+.estoque-tab-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0 0 0.35rem;
+}
+
+.estoque-tab-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.estoque-kpi-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.85rem;
+  scrollbar-width: none;
+}
+
+.estoque-kpi-strip::-webkit-scrollbar { display: none; }
+
+.estoque-kpi-pill {
+  flex: 0 0 auto;
+  min-width: 5.5rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: #fff;
+  text-align: center;
+  cursor: pointer;
+  font: inherit;
+}
+
+.estoque-kpi-pill-val {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.estoque-kpi-pill-label {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.estoque-kpi-pill--critico { border-color: #fecaca; background: #fef2f2; }
+.estoque-kpi-pill--critico .estoque-kpi-pill-val { color: #b91c1c; }
+.estoque-kpi-pill--aviso { border-color: #fde68a; background: #fffbeb; }
+.estoque-kpi-pill--aviso .estoque-kpi-pill-val { color: #b45309; }
+.estoque-kpi-pill--ok { border-color: #a7f3d0; background: #ecfdf5; }
+.estoque-kpi-pill--ok .estoque-kpi-pill-val { color: #047857; }
+
+.estoque-search-bar {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.estoque-search-bar .estoque-search-input {
+  width: 100%;
+  padding: 1rem 2.5rem 1rem 2.85rem;
+  border: 2px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  background: #fff;
+  box-shadow: var(--shadow-xs);
+}
+
+.estoque-search-bar .estoque-search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.estoque-chips {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.75rem;
+  scrollbar-width: none;
+}
+
+.estoque-chips::-webkit-scrollbar { display: none; }
+
+.estoque-chip {
+  flex-shrink: 0;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.estoque-chip--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.estoque-filtros-bar {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.65rem;
+}
+
+.estoque-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.estoque-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.estoque-card.estoque-row--critico {
+  border-color: #fecaca;
+  background: #fffafa;
+}
+
+.estoque-card.estoque-row--aviso {
+  border-color: #fde68a;
+  background: #fffdf5;
+}
+
+.estoque-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.estoque-card-secao {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+}
+
+.estoque-card-nome {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.estoque-card-min {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.estoque-card-qtd-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.65rem;
+  margin-bottom: 0.85rem;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  border: 1px solid #e2e8f0;
+}
+
+.estoque-card-qtd-display {
+  min-width: 4rem;
+  text-align: center;
+}
+
+.estoque-card-qtd-display .estoque-qtd-valor {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.estoque-qtd-btn--lg {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.25rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--primary);
+  background: #fff;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.estoque-qtd-btn--lg:active {
+  background: var(--primary-soft);
+}
+
+.estoque-card-foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.estoque-card-foot .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.estoque-desk-table {
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.estoque-bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 120;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  padding: 0.35rem 0 calc(0.35rem + env(safe-area-inset-bottom, 0));
+  background: #fff;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.estoque-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.35rem 0.25rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.estoque-nav-btn svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.estoque-nav-btn.is-active {
+  color: var(--primary);
+}
+
+.estoque-nav-btn--primary {
+  color: var(--primary);
+}
+
+.estoque-nav-btn--primary svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.estoque-lista-alertas--page {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.estoque-tab-actions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .estoque-bottom-nav { display: none; }
+  .estoque-app { padding-bottom: 2rem; }
+  .estoque-cards { display: none; }
+}
+
+@media (max-width: 1023px) {
+  .estoque-desk-table { display: none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

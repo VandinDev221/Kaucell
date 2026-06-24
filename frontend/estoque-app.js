@@ -29,9 +29,11 @@
   var estoqueMasterBody = document.getElementById('estoque-master-body');
   var estoqueTabelaWrap = document.getElementById('estoque-tabela-wrap');
   var estoqueBuscaVazia = document.getElementById('estoque-busca-vazia');
+  var estoqueCardsList = document.getElementById('estoque-cards-list');
+  var estoqueChipsSecao = document.getElementById('estoque-chips-secao');
+  var estoqueBannerCritico = document.getElementById('estoque-banner-critico');
+  var btnVerFaltando = document.getElementById('btn-ver-faltando');
   var estoqueResultados = document.getElementById('estoque-resultados');
-  var panelCadastro = document.getElementById('panel-cadastro');
-  var panelWhatsapp = document.getElementById('panel-whatsapp');
   var estoqueModal = document.getElementById('estoque-modal');
   var formEditarItem = document.getElementById('form-editar-item');
   var editSelectSecao = document.getElementById('edit-item-secao');
@@ -43,7 +45,7 @@
   var notifApikeyEnv = false;
   var estoqueCache = { secoes: [], alertas: { faltando: [], baixo: [] } };
   var filtroStatus = 'todos';
-  var modoVisao = 'tabela';
+  var estoqueTabAtiva = 'pecas';
   var termoBusca = '';
 
   function request(url, options) {
@@ -165,6 +167,76 @@
     );
   }
 
+  function usarTabelaDesktop() {
+    return window.matchMedia('(min-width: 1024px)').matches;
+  }
+
+  function buildCardHtml(item) {
+    var q = termoBusca;
+    return (
+      '<article class="estoque-card ' + rowClass(item.status) + '" data-id="' + item.id + '" data-secao-id="' + item.secao_id + '" data-nome="' + escapeHtml(item.nome) + '" data-qtd="' + item.quantidade + '" data-min="' + item.quantidade_minima + '" data-unidade="' + escapeHtml(item.unidade) + '" data-status="' + item.status + '">' +
+      '<div class="estoque-card-head">' +
+      '<span class="estoque-card-secao">' + highlightText(item.secao_nome, q) + '</span>' +
+      badgeStatus(item.status) +
+      '</div>' +
+      '<h3 class="estoque-card-nome">' + highlightText(item.nome, q) + '</h3>' +
+      '<p class="estoque-card-min">Mínimo: ' + item.quantidade_minima + ' ' + escapeHtml(item.unidade) + '</p>' +
+      '<div class="estoque-card-qtd-row">' +
+      '<button type="button" class="estoque-qtd-btn estoque-qtd-btn--lg estoque-action" data-action="menos" aria-label="Diminuir">−</button>' +
+      '<div class="estoque-card-qtd-display"><span class="estoque-qtd-valor">' + item.quantidade + '</span><span class="estoque-unidade">' + escapeHtml(item.unidade) + '</span></div>' +
+      '<button type="button" class="estoque-qtd-btn estoque-qtd-btn--lg estoque-action" data-action="mais" aria-label="Aumentar">+</button>' +
+      '</div>' +
+      '<div class="estoque-card-foot">' +
+      '<button type="button" class="btn btn-small btn-secondary estoque-action" data-action="editar">Editar</button>' +
+      '<button type="button" class="btn btn-small btn-secondary estoque-action" data-action="excluir">Excluir</button>' +
+      '</div></article>'
+    );
+  }
+
+  function renderCardsList() {
+    if (!estoqueCardsList) return;
+    var todos = flattenItens(estoqueCache.secoes);
+    var filtrados = filtrarItens(todos);
+    estoqueCardsList.innerHTML = filtrados.map(buildCardHtml).join('');
+    renderResultados(todos.length, filtrados.length, todos.length);
+    if (estoqueBuscaVazia) {
+      estoqueBuscaVazia.hidden = !(todos.length > 0 && filtrados.length === 0);
+    }
+  }
+
+  function renderChipsSecao(secoes) {
+    if (!estoqueChipsSecao) return;
+    var ativo = estoqueFiltroSecao ? estoqueFiltroSecao.value : '';
+    var html = '<button type="button" class="estoque-chip' + (ativo === '' ? ' estoque-chip--active' : '') + '" data-secao="">Todas</button>';
+    (secoes || []).forEach(function (s) {
+      var sel = String(s.id) === String(ativo) ? ' estoque-chip--active' : '';
+      html += '<button type="button" class="estoque-chip' + sel + '" data-secao="' + s.id + '">' + escapeHtml(s.nome) + '</button>';
+    });
+    estoqueChipsSecao.innerHTML = html;
+  }
+
+  function trocarTab(tab) {
+    estoqueTabAtiva = tab || 'pecas';
+    ['pecas', 'alertas', 'cadastro', 'config'].forEach(function (nome) {
+      var painel = document.getElementById('estoque-tab-' + nome);
+      if (painel) {
+        painel.hidden = nome !== estoqueTabAtiva;
+        painel.classList.toggle('is-active', nome === estoqueTabAtiva);
+      }
+    });
+    document.querySelectorAll('.estoque-nav-btn').forEach(function (btn) {
+      btn.classList.toggle('is-active', btn.getAttribute('data-tab') === estoqueTabAtiva);
+    });
+  }
+
+  function aplicarFiltroRapido(status) {
+    filtroStatus = status;
+    document.querySelectorAll('.estoque-filtro').forEach(function (btn) {
+      btn.classList.toggle('estoque-filtro--active', btn.getAttribute('data-filtro') === status);
+    });
+    trocarTab('pecas');
+    aplicarVisao();
+  }
   function buildRowHtml(item, showSecao) {
     var q = termoBusca;
     return (
@@ -220,12 +292,20 @@
   }
 
   function renderAlertas(alertas) {
-    if (!estoqueListaAlertas) return;
     var faltando = alertas.faltando || [];
     var baixo = alertas.baixo || [];
+    if (estoqueBannerCritico) {
+      var sub = document.getElementById('estoque-banner-sub');
+      if (faltando.length) {
+        estoqueBannerCritico.hidden = false;
+        if (sub) sub.textContent = faltando.length + ' peça(s) zerada(s) — repor urgente';
+      } else {
+        estoqueBannerCritico.hidden = true;
+      }
+    }
+    if (!estoqueListaAlertas) return;
     if (!faltando.length && !baixo.length) {
-      estoqueListaAlertas.hidden = true;
-      estoqueListaAlertas.innerHTML = '';
+      estoqueListaAlertas.innerHTML = '<p class="estoque-empty">Nenhum alerta no momento. Estoque em dia.</p>';
       return;
     }
     var html = '<div class="estoque-alertas-resumo">';
@@ -245,19 +325,36 @@
     }
     html += '</div>';
     estoqueListaAlertas.innerHTML = html;
-    estoqueListaAlertas.hidden = false;
+  }
+
+  function aplicarVisao() {
+    renderChipsSecao(estoqueCache.secoes || []);
+    if (usarTabelaDesktop()) {
+      if (estoqueCardsList) estoqueCardsList.hidden = true;
+      if (estoqueTabelaWrap) {
+        estoqueTabelaWrap.hidden = false;
+        renderTabelaMaster();
+      }
+    } else {
+      if (estoqueTabelaWrap) estoqueTabelaWrap.hidden = true;
+      if (estoqueCardsList) {
+        estoqueCardsList.hidden = false;
+        renderCardsList();
+      }
+    }
+    if (estoqueSecoesContainer) estoqueSecoesContainer.hidden = true;
   }
 
   function renderResultados(total, filtrados, totalGeral) {
     if (!estoqueResultados) return;
     if (totalGeral === 0) {
-      estoqueResultados.textContent = 'Nenhuma peça cadastrada. Use Cadastro para começar.';
+      estoqueResultados.textContent = 'Nenhuma peça cadastrada. Toque em Nova para começar.';
       return;
     }
     if (termoBusca || filtroStatus !== 'todos' || (estoqueFiltroSecao && estoqueFiltroSecao.value)) {
       estoqueResultados.textContent = 'Exibindo ' + filtrados + ' de ' + totalGeral + ' peças';
     } else {
-      estoqueResultados.textContent = totalGeral + ' peças em ' + (estoqueCache.secoes || []).length + ' seções';
+      estoqueResultados.textContent = totalGeral + ' peças · ' + (estoqueCache.secoes || []).length + ' seções';
     }
   }
 
@@ -328,18 +425,6 @@
     renderResultados(flattenItens(secoes).length, filtrarItens(flattenItens(secoes)).length, flattenItens(secoes).length);
     if (!algumVisivel && flattenItens(secoes).length > 0 && estoqueBuscaVazia) {
       estoqueBuscaVazia.hidden = false;
-    }
-  }
-
-  function aplicarVisao() {
-    if (modoVisao === 'secoes') {
-      if (estoqueTabelaWrap) estoqueTabelaWrap.hidden = true;
-      if (estoqueSecoesContainer) estoqueSecoesContainer.hidden = false;
-      renderSecoesView();
-    } else {
-      if (estoqueSecoesContainer) estoqueSecoesContainer.hidden = true;
-      if (estoqueTabelaWrap) estoqueTabelaWrap.hidden = false;
-      renderTabelaMaster();
     }
   }
 
@@ -522,30 +607,30 @@
       return;
     }
     if (!alvo.classList.contains('estoque-action')) return;
-    var tr = alvo.closest('tr');
-    if (!tr) return;
-    var itemId = tr.getAttribute('data-id');
+    var row = alvo.closest('tr') || alvo.closest('.estoque-card');
+    if (!row) return;
+    var itemId = row.getAttribute('data-id');
     var acao = alvo.getAttribute('data-action');
-    if (acao === 'editar') abrirModalEditar(tr);
-    else if (acao === 'excluir') excluirItemEstoque(tr);
+    if (acao === 'editar') abrirModalEditar(row);
+    else if (acao === 'excluir') excluirItemEstoque(row);
     else if (acao === 'mais') ajustarItemEstoque(itemId, 1);
     else if (acao === 'menos') ajustarItemEstoque(itemId, -1);
   }
 
   function mostrarLogin() {
     pararEstoqueTempoReal();
+    document.body.classList.remove('estoque-body--ativo');
     if (loginArea) loginArea.hidden = false;
     if (estoqueArea) estoqueArea.hidden = true;
-    if (logoutTop) logoutTop.hidden = true;
   }
 
   function mostrarEstoque() {
+    document.body.classList.add('estoque-body--ativo');
     if (loginArea) loginArea.hidden = true;
     if (estoqueArea) estoqueArea.hidden = false;
-    if (logoutTop) logoutTop.hidden = false;
+    trocarTab('pecas');
     carregarEstoque({ forcar: true, tempoReal: true });
     iniciarEstoqueTempoReal();
-    if (estoqueBusca) setTimeout(function () { estoqueBusca.focus(); }, 300);
   }
 
   function verificarAuthInicial() {
@@ -593,14 +678,40 @@
     estoqueFiltroSecao.addEventListener('change', function () { aplicarVisao(); });
   }
 
-  document.querySelectorAll('.estoque-view-btn').forEach(function (btn) {
+  document.querySelectorAll('[data-filtro-rapido]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      modoVisao = btn.getAttribute('data-view') || 'tabela';
-      document.querySelectorAll('.estoque-view-btn').forEach(function (b) {
-        b.classList.toggle('estoque-view-btn--active', b === btn);
+      aplicarFiltroRapido(btn.getAttribute('data-filtro-rapido') || 'todos');
+    });
+  });
+
+  if (btnVerFaltando) {
+    btnVerFaltando.addEventListener('click', function () {
+      aplicarFiltroRapido('faltando');
+    });
+  }
+
+  if (estoqueChipsSecao) {
+    estoqueChipsSecao.addEventListener('click', function (e) {
+      var chip = e.target.closest('.estoque-chip');
+      if (!chip) return;
+      var secaoId = chip.getAttribute('data-secao') || '';
+      if (estoqueFiltroSecao) estoqueFiltroSecao.value = secaoId;
+      document.querySelectorAll('.estoque-chip').forEach(function (c) {
+        c.classList.toggle('estoque-chip--active', c === chip);
       });
       aplicarVisao();
     });
+  }
+
+  document.querySelectorAll('.estoque-nav-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      trocarTab(btn.getAttribute('data-tab') || 'pecas');
+    });
+  });
+
+  window.addEventListener('resize', function () {
+    if (!estoqueArea || estoqueArea.hidden) return;
+    aplicarVisao();
   });
 
   document.querySelectorAll('.estoque-preset-btn').forEach(function (btn) {
@@ -608,24 +719,10 @@
       var nome = btn.getAttribute('data-preset') || '';
       var input = document.getElementById('estoque-secao-nome');
       if (input) input.value = nome;
-      if (panelCadastro) panelCadastro.open = true;
+      trocarTab('cadastro');
       if (input) input.focus();
     });
   });
-
-  if (btnEstoqueCadastro && panelCadastro) {
-    btnEstoqueCadastro.addEventListener('click', function () {
-      panelCadastro.open = true;
-      panelCadastro.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
-
-  if (btnEstoqueWhatsapp && panelWhatsapp) {
-    btnEstoqueWhatsapp.addEventListener('click', function () {
-      panelWhatsapp.open = true;
-      panelWhatsapp.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
 
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -635,8 +732,8 @@
     if (e.key === 'Escape') fecharModal();
   });
 
+  if (estoqueCardsList) estoqueCardsList.addEventListener('click', handleTableClick);
   if (estoqueMasterBody) estoqueMasterBody.addEventListener('click', handleTableClick);
-  if (estoqueSecoesContainer) estoqueSecoesContainer.addEventListener('click', handleTableClick);
 
   if (formEditarItem) {
     formEditarItem.addEventListener('submit', function (e) {
@@ -785,6 +882,6 @@
     });
   }
 
-  if (logoutTop) logoutTop.hidden = true;
+  if (logoutTop) logoutTop.hidden = false;
   verificarAuthInicial();
 })();
