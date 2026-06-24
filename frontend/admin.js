@@ -15,7 +15,7 @@
   var loginForm = document.getElementById('admin-login-form');
   var loginUsuario = document.getElementById('admin-usuario');
   var loginSenha = document.getElementById('admin-senha');
-  var logoutTop = document.querySelector('.admin-logout-top');
+  var logoutTop = document.getElementById('admin-logout');
   var chkDestaque = document.getElementById('produto-destaque');
   var API = {
     produtos: 'api/produtos.php',
@@ -38,6 +38,7 @@
     document.querySelectorAll('.admin-tab-panel').forEach(function (panel) {
       panel.hidden = panel.id !== 'tab-' + tabId;
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function formatarData(dataIso) {
@@ -64,12 +65,12 @@
     tr.setAttribute('data-imagem-arquivo', item.imagem_arquivo || '');
     tr.setAttribute('data-destaque', item.destaque ? '1' : '0');
     tr.innerHTML =
-      '<td>' + item.nome + '</td>' +
-      '<td>' + item.categoria + '</td>' +
-      '<td class="tabela-preco">' + formatarPreco(item.preco) + '</td>' +
-      '<td>' + imagemInfo + '</td>' +
-      '<td>' + (item.destaque ? 'Sim' : 'Não') + '</td>' +
-      '<td class="admin-actions">' +
+      '<td data-label="Produto">' + item.nome + '</td>' +
+      '<td data-label="Categoria">' + item.categoria + '</td>' +
+      '<td class="tabela-preco" data-label="Preço">' + formatarPreco(item.preco) + '</td>' +
+      '<td data-label="Imagem">' + imagemInfo + '</td>' +
+      '<td data-label="Destaque">' + (item.destaque ? 'Sim' : 'Não') + '</td>' +
+      '<td class="admin-actions" data-label="Ações">' +
       '<button type="button" class="btn btn-small btn-secondary admin-action-btn" data-action="editar">Editar</button> ' +
       '<button type="button" class="btn btn-small btn-primary admin-action-btn" data-action="excluir">Excluir</button>' +
       '</td>';
@@ -83,10 +84,10 @@
     tr.setAttribute('data-nome-servico', item.nome_servico || '');
     tr.setAttribute('data-preco', item.preco || '');
     tr.innerHTML =
-      '<td>' + item.modelo + '</td>' +
-      '<td>' + item.nome_servico + '</td>' +
-      '<td class="tabela-preco">' + formatarPreco(item.preco) + '</td>' +
-      '<td class="admin-actions">' +
+      '<td data-label="Modelo">' + item.modelo + '</td>' +
+      '<td data-label="Serviço">' + item.nome_servico + '</td>' +
+      '<td class="tabela-preco" data-label="Valor">' + formatarPreco(item.preco) + '</td>' +
+      '<td class="admin-actions" data-label="Ações">' +
       '<button type="button" class="btn btn-small btn-secondary admin-action-btn servico-action" data-action="editar">Editar</button> ' +
       '<button type="button" class="btn btn-small btn-primary admin-action-btn servico-action" data-action="excluir">Excluir</button>' +
       '</td>';
@@ -160,11 +161,11 @@
     tr.setAttribute('data-resumo', item.resumo || '');
     tr.setAttribute('data-imagem-url', item.imagem_url || '');
     tr.innerHTML =
-      '<td>' + (item.titulo || '').replace(/</g, '&lt;') + '</td>' +
-      '<td>' + formatarData(item.data_publicacao) + '</td>' +
-      '<td>' + imgCel + '</td>' +
-      '<td>' + (item.resumo || '').substring(0, 60).replace(/</g, '&lt;') + (item.resumo && item.resumo.length > 60 ? '…' : '') + '</td>' +
-      '<td>' +
+      '<td data-label="Título">' + (item.titulo || '').replace(/</g, '&lt;') + '</td>' +
+      '<td data-label="Data">' + formatarData(item.data_publicacao) + '</td>' +
+      '<td data-label="Imagem">' + imgCel + '</td>' +
+      '<td data-label="Resumo">' + (item.resumo || '').substring(0, 60).replace(/</g, '&lt;') + (item.resumo && item.resumo.length > 60 ? '…' : '') + '</td>' +
+      '<td class="admin-actions" data-label="Ações">' +
       '<button type="button" class="btn btn-small btn-secondary admin-action-btn blog-action-btn" data-action="editar">Editar</button> ' +
       '<button type="button" class="btn btn-small btn-primary admin-action-btn blog-action-btn" data-action="excluir">Excluir</button>' +
       '</td>';
@@ -247,13 +248,17 @@
   }
 
   function mostrarLogin() {
+    document.body.classList.remove('admin-body--ativo');
     if (loginArea) loginArea.hidden = false;
     if (adminArea) adminArea.hidden = true;
+    if (logoutTop) logoutTop.hidden = true;
   }
 
   function mostrarAdmin() {
+    document.body.classList.add('admin-body--ativo');
     if (loginArea) loginArea.hidden = true;
     if (adminArea) adminArea.hidden = false;
+    if (logoutTop) logoutTop.hidden = false;
   }
 
   function verificarAuthInicial() {

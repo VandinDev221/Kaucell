@@ -1455,6 +1455,96 @@ body.nav-open .nav-overlay {
 
 .admin-login-extra { margin-top: 1rem; }
 
+.admin-auth-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.admin-body {
+  overflow-x: hidden;
+}
+
+.admin-login-area {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.admin-login-card {
+  padding: 1.5rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+#admin-login-area[hidden],
+#admin-area[hidden] {
+  display: none !important;
+}
+
+.main--admin {
+  padding-bottom: 1.5rem;
+}
+
+.admin-body--ativo .admin-page-desc {
+  display: none;
+}
+
+.admin-body--ativo .admin-page-header {
+  margin-bottom: 0.75rem;
+}
+
+.admin-body--ativo .admin-tabs {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 45;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+}
+
+.admin-body--ativo .admin-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-body--ativo .admin-tab {
+  flex: 0 0 auto;
+  min-width: auto;
+  white-space: nowrap;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+}
+
+.admin-body--ativo .admin-tab:not(.admin-tab--active) {
+  border-color: var(--border);
+  background: var(--bg-muted);
+}
+
+.admin-body--ativo .admin-tab--active {
+  border-color: var(--primary);
+}
+
+.admin-footer .footer-main {
+  display: none;
+}
+
+.admin-footer .footer-copy {
+  padding: 1rem 0;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
@@ -2051,6 +2141,11 @@ body.nav-open .nav-overlay {
   .estoque-kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .estoque-kpi--ok { grid-column: 1 / -1; }
   .estoque-toolbar { top: calc(var(--header-h) + 0.35rem); }
+
+  .admin-grid,
+  .admin-preview-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2659,6 +2754,108 @@ body.nav-open .nav-overlay {
 
   .admin-grid,
   .admin-preview-grid { grid-template-columns: 1fr; }
+
+  .admin-section {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .admin-section .section-header {
+    margin-bottom: 1rem;
+  }
+
+  .admin-section .section-title {
+    font-size: 1.45rem;
+  }
+
+  .admin-card {
+    padding: 1rem;
+  }
+
+  .admin-card-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .admin-form .btn {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .admin-form input,
+  .admin-form textarea,
+  .admin-form select {
+    min-height: 46px;
+    font-size: 1rem;
+  }
+
+  .admin-table--cards-mobile thead {
+    display: none;
+  }
+
+  .admin-table--cards-mobile tbody tr {
+    display: block;
+    margin-bottom: 0.85rem;
+    padding: 1rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .admin-table--cards-mobile tbody tr:hover td {
+    background: transparent;
+  }
+
+  .admin-table--cards-mobile td {
+    display: grid;
+    grid-template-columns: minmax(5rem, 34%) 1fr;
+    gap: 0.25rem 0.75rem;
+    padding: 0.45rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+    word-break: break-word;
+  }
+
+  .admin-table--cards-mobile td:last-child {
+    border-bottom: none;
+  }
+
+  .admin-table--cards-mobile td::before {
+    content: attr(data-label);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+
+  .admin-table--cards-mobile td.admin-actions {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding-top: 0.65rem;
+  }
+
+  .admin-table--cards-mobile .admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .admin-table--cards-mobile .admin-action-btn {
+    width: 100%;
+    margin: 0;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .admin-table-wrap {
+    overflow: visible;
+  }
+
+  .main--admin {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+  }
 
   /* Product carousel mobile */
   .main--home .section-destaques .container,
